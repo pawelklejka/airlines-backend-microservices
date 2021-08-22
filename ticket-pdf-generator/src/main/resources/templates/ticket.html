@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>Spring Boot - Thymeleaf</title>
+    <link th:rel="stylesheet" th:href="@{/assets/css/style.css}" />
+
+
+</head>
+<body>
+
+<!--18cm na 8cm-->
+<div class="container">
+    <nav class="vertical-nav">
+        <div>qr code or code bar</div>
+    </nav>
+    <nav class="horizontal-nav"> CosmicFlights</nav>
+    <main>
+        <div class="box-one">
+            <b>NAME OF PASSENGER: </b> <br />
+            <p th:text="${ticket.getTouristInFlight().getSurname()}"> / <p th:text="${ticket.getTouristInFlight().getName()}"></p>
+            <b>FROM: </b> <span th:text="${ticket.getFlightThatTouristIsIn().getStartingDestination()}"></span><br />
+            <b>TO: </b> <span th:text="${ticket.getFlightThatTouristIsIn().getFinalDestination()}"></span>
+        </div>
+        <div class="box-two">
+            <b>FLIGHT NUMBER: </b>
+            <p th:text="${ticket.getFlightThatTouristIsIn().getId()}"></p>
+            <b>BOARDING TIME: </b>
+            <p th:text="${ticket.getBoardingTime()}"></p>
+
+            <b>DATE: </b>
+            <p th:text="${ticket.getFlightThatTouristIsIn().getFlightStartingTime()}"></p>
+            <b>SEAT: </b>
+            <p th:text="${ticket.getSeat()}"></p>
+            <!--        Tu bedzie logo-->
+        </div>
+        <div class="box-four">
+            <b>NAME OF PASSENGER: </b>
+            <p th:text="${ticket.getTouristInFlight().getSurname()}"> / <p th:text="${ticket.getTouristInFlight().getName()}"></p>
+            <b>FROM: </b> <p th:text="${ticket.getFlightThatTouristIsIn().getStartingDestination()}"></p>
+            <b>TO: </b> <p th:text="${ticket.getFlightThatTouristIsIn().getFinalDestination()}"></p>
+            <div>
+                FLIGHT: <br />
+                <p th:text="${ticket.getFlightThatTouristIsIn().getId()}"></p>
+                <b>GATE: </b> <span th:text="${ticket.getGate()}"></span>
+                <br />
+                <br />
+                HAVE A NICE TRIP!
+            </div>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

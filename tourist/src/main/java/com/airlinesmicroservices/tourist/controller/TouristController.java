@@ -1,5 +1,6 @@
 package com.airlinesmicroservices.tourist.controller;
 
+import com.airlinesmicroservices.tourist.DTO.TouristDTO;
 import com.airlinesmicroservices.tourist.model.Tourist;
 import com.airlinesmicroservices.tourist.service.TouristService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,32 +36,32 @@ public class TouristController {
     }
 
     @GetMapping("/{id}")
-    public Tourist findById(@PathVariable("id") Long id){
+    public Tourist findById(@PathVariable("id") String id){
         return touristService.findById(id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteById(@PathVariable("id") Long id){
+    public void deleteById(@PathVariable("id") String id){
         touristService.deleteById(id);
     }
 
     @PatchMapping("/{id}/delete")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deleteTicketFromTourist(@PathVariable("id") Long touristId, @RequestParam Long flightId){
+    public void deleteTicketFromTourist(@PathVariable("id") String touristId, @RequestParam String flightId){
         touristService.deleteTicketFromTourist(touristId, flightId);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void update(@PathVariable("id") Long id, @Valid @RequestBody Tourist tourist){
+    public void update(@PathVariable("id") String id, @Valid @RequestBody TouristDTO tourist){
         touristService.updateTourist(id, tourist);
 
     }
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@Valid @RequestBody Tourist tourist){
+    public void save(@Valid @RequestBody TouristDTO tourist){
         touristService.save(tourist);
     }
 

@@ -1,0 +1,76 @@
+body {
+    font-size: small;
+}
+
+.container{
+    border-bottom: 1px dashed blue;
+    border-right: 1px dashed blue;
+    border-radius: 10px 10px 10px 10px;
+    width: 18cm;
+    height: 8cm;
+}
+
+.vertical-nav{
+    border-radius: 0px 0px 0px 10px;
+    top: 2cm;
+    background-color: blue;
+    position: absolute;
+    height: 6cm;
+    width: 3cm;
+
+}
+
+.horizontal-nav{
+    border-radius: 10px 10px 0px 0px;
+    padding: 1cm 1cm 0 0;
+    text-align: right;
+    position: absolute;
+    background-color: blue;
+    height: 1cm;
+    width: 17cm;
+}
+
+main{
+    border-radius: 0px 0px 10px 0px;
+    color: red;
+    position: absolute;
+    top: 2cm;
+    left: 3cm;
+    height: 6cm;
+    width: 16cm;
+
+
+}
+
+.box-one{
+    position: absolute;
+    padding: 0.1cm 0 0 0.1cm;
+    width: 6.9cm;
+    height: 5.9cm;
+
+}
+
+.box-two{
+    position: absolute;
+    padding: 0.1cm 0 0 0;
+    left: 6cm;
+    width: 6cm;
+    height: 5.9cm;
+
+
+}
+
+
+.box-four{
+    font-size: xx-small;
+    position: absolute;
+    left: 12cm;
+    padding: 0.10cm 0.10cm 0 0.10cm;
+    width: 3cm;
+    height: 5.9cm;
+    border-left: 1px dashed blue;
+
+}
+
+
+

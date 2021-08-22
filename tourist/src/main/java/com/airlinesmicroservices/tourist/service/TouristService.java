@@ -1,5 +1,6 @@
 package com.airlinesmicroservices.tourist.service;
 
+import com.airlinesmicroservices.tourist.DTO.TouristDTO;
 import com.airlinesmicroservices.tourist.model.Tourist;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,10 +11,10 @@ import java.util.Optional;
 
 public interface TouristService {
     Page<Tourist> findAll(Pageable pageable);
-    Tourist findById(Long id);
-    void save(Tourist tourist);
-    void updateTourist(Long id, Tourist tourist);
-    void addTicketToTourist(Long id, Tourist tourist);
-    void deleteTicketFromTourist(Long touristId, Long flightId);
-    void deleteById(Long id);
+    Tourist findById(String id);
+    void save(TouristDTO tourist);
+    void updateTourist(String id, TouristDTO tourist);
+    void addTicketToTourist(String id, TouristDTO tourist);
+    void deleteTicketFromTourist(String touristId, String flightId);
+    void deleteById(String id);
 }

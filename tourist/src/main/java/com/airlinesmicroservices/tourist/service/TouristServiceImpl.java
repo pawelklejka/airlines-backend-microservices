@@ -1,5 +1,7 @@
 package com.airlinesmicroservices.tourist.service;
 
+import com.airlinesmicroservices.tourist.DTO.TicketDTO;
+import com.airlinesmicroservices.tourist.DTO.TouristDTO;
 import com.airlinesmicroservices.tourist.exception.AirlinesError;
 import com.airlinesmicroservices.tourist.exception.AirlinesException;
 import com.airlinesmicroservices.tourist.model.Tourist;
@@ -12,11 +14,13 @@ import org.springframework.stereotype.Service;
 public class TouristServiceImpl implements TouristService {
     private final TouristRepository touristRepository;
     private final DateParserService dateParserService;
+    private final TicketServiceClient ticketServiceClient;
 
-    public TouristServiceImpl(TouristRepository touristRepository, DateParserService dateParserService) {
+    public TouristServiceImpl(TouristRepository touristRepository, DateParserService dateParserService, TicketServiceClient ticketServiceClient) {
         this.touristRepository = touristRepository;
         this.dateParserService = dateParserService;
 
+        this.ticketServiceClient = ticketServiceClient;
     }
 
     @Override
@@ -25,24 +29,39 @@ public class TouristServiceImpl implements TouristService {
     }
 
     @Override
-    public Tourist findById(Long id) {
+    public Tourist findById(String id) {
         return touristRepository.findById(id).orElseThrow(() -> new AirlinesException(AirlinesError.TOURIST_NOT_FOUND));
     }
 
     @Override
-    public void save(Tourist tourist) {
-        touristRepository.save(tourist);
+    public void save(TouristDTO tourist) {
+        Tourist touristToBeSaved = new Tourist();
+        touristToBeSaved.setName(tourist.getName());
+        touristToBeSaved.setSurname(tourist.getSurname());
+        touristToBeSaved.setCountry(tourist.getCountry());
+        touristToBeSaved.setEmail(tourist.getEmail());
+        touristToBeSaved.setDateOfBirth(tourist.getDateOfBirth());
+        touristToBeSaved.setSex(tourist.getSex());
+        touristToBeSaved.setNotes(tourist.getNotes());
+        touristRepository.save(touristToBeSaved);
+        TicketDTO ticketDTO = new TicketDTO();
+        ticketDTO.setTouristId(touristRepository.findByEmail(tourist.getEmail()).get().getTouristId());
+        ticketDTO.setFlightStartingTime(tourist.getFlightStartingTime());
+        ticketDTO.setFlightId(tourist.getFlightId());
+        ticketServiceClient.save(ticketDTO);
+
+
     }
 
     @Override
-    public void updateTourist(Long id, Tourist tourist) {
+    public void updateTourist(String id, TouristDTO tourist) {
         Tourist currentTourist = touristRepository.findById(id)
                 .orElseThrow(() -> new AirlinesException(AirlinesError.TOURIST_NOT_FOUND));
         touristRepository.save(currentTourist);
     }
 
     @Override
-    public void addTicketToTourist(Long id, Tourist tourist) {
+    public void addTicketToTourist(String id, TouristDTO tourist) {
 //        Tourist currentTourist = touristRepository.findById(id).get();
 //        Flight flight = new Flight();
 //        flight.setStartingDestination(flightDTO.getStartingDestination());
@@ -55,7 +74,7 @@ public class TouristServiceImpl implements TouristService {
     }
 
     @Override
-    public void deleteTicketFromTourist(Long touristId, Long flightId) {
+    public void deleteTicketFromTourist(String touristId, String flightId) {
 //        Tourist tourist = touristRepository.findById(touristId)
 //                .orElseThrow(() -> new AirlinesException(AirlinesError.TOURIST_NOT_FOUND));
 //
@@ -70,7 +89,7 @@ public class TouristServiceImpl implements TouristService {
 
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
 
         touristRepository.deleteById(id);
     }

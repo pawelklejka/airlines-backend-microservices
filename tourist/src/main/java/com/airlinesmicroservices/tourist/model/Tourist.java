@@ -8,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.util.Set;
 
 @Document
@@ -30,7 +29,7 @@ public class Tourist {
     @NotNull
     private String dateOfBirth;
     private String notes;
-    private Set<Ticket> tickets;
+    private Set<TicketReadModel> tickets;
 
     public String getTouristId() {
         return touristId;
@@ -96,11 +95,11 @@ public class Tourist {
         this.notes = notes;
     }
 
-    public Set<Ticket> getTickets() {
+    public Set<TicketReadModel> getTickets() {
         return tickets;
     }
 
-    public void setTickets(Set<Ticket> tickets) {
+    public void setTickets(Set<TicketReadModel> tickets) {
         this.tickets = tickets;
     }
 }
