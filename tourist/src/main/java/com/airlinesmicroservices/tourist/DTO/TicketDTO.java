@@ -3,6 +3,7 @@ package com.airlinesmicroservices.tourist.DTO;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 public class TicketDTO {
     @NotBlank
@@ -38,3 +39,4 @@ public class TicketDTO {
     }
 
 }
+

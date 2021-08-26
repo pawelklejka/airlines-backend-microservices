@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
 @Document
@@ -30,6 +31,10 @@ public class Tourist {
     private String dateOfBirth;
     private String notes;
     private Set<TicketReadModel> tickets;
+
+    public Tourist(){
+        this.tickets = new HashSet<>();
+    }
 
     public String getTouristId() {
         return touristId;

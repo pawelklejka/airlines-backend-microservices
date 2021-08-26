@@ -77,8 +77,8 @@ public class FlightController {
         flightService.save(flight);
     }
 
-    @GetMapping("/fillWithData")
-    public void fillWithData(@RequestParam Integer amountOfFlight){
-        flightService.fillWithData(amountOfFlight);
-    }
+//    @GetMapping("/fillWithData")
+//    public void fillWithData(@RequestParam Integer amountOfFlight){
+//        flightService.fillWithData(amountOfFlight);
+//    }
 }

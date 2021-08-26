@@ -10,4 +10,5 @@ import java.util.Set;
 @Repository
 public interface TicketRepository extends MongoRepository<Ticket, String> {
     List<Ticket> findAllByFlightId(String flightId);
+    List<Ticket> findAllByTouristId(String touristId);
 }

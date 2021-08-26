@@ -23,7 +23,7 @@ public class TicketEventConsumerServiceImpl implements TicketEventConsumerServic
 
     @RabbitListener(bindings = {
             @QueueBinding(value =
-            @Queue(value = "ticketServiceQueue"), exchange = @Exchange(name = "eventExchange", type = "topic"), key = {"ticket.created"})
+            @Queue(value = "ticketFlightServiceQueue"), exchange = @Exchange(name = "eventExchange", type = "topic"), key = {"ticket.created"})
     }, messageConverter = "messageConverter")
     @Override
     public void ticketCreated(TicketDTO ticketDTO) {
@@ -31,6 +31,7 @@ public class TicketEventConsumerServiceImpl implements TicketEventConsumerServic
                 .orElseThrow(() -> new AirlinesException(AirlinesError.FLIGHT_NOT_FOUND));
 
         flight.getTouristIds().add(ticketDTO.getTouristId());
+        flightRepository.save(flight);
 
     }
 

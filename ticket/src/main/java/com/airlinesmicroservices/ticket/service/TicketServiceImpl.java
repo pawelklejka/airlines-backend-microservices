@@ -27,6 +27,16 @@ public class TicketServiceImpl implements TicketService<Ticket, String>{
     }
 
     @Override
+    public List<Ticket> findAllByTouristId(String touristId) {
+        return ticketRepository.findAllByTouristId(touristId);
+    }
+
+    @Override
+    public List<Ticket> findAll() {
+        return ticketRepository.findAll();
+    }
+
+    @Override
     public Ticket findById(String ticketId) {
         return ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new AirlinesException(AirlinesError.TICKET_NOT_FOUND));
@@ -36,7 +46,7 @@ public class TicketServiceImpl implements TicketService<Ticket, String>{
     public void save(TicketDTO ticketDTO) {
         Ticket ticket = new Ticket();
         ticket.setFlightId(ticketDTO.getFlightId());
-        ticket.setTouristId(ticket.getTouristId());
+        ticket.setTouristId(ticketDTO.getTouristId());
         //TODO zrobic zeby generowalo number fotela od 0 do flightCapacity
         ticket.setSeat(10l);
         ticket.setGate("20S");

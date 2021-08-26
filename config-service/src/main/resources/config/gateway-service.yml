@@ -1,0 +1,39 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: tourist-service
+          uri: lb://tourist-service
+          predicates:
+            - Path=/tourists/**
+          filters:
+            - RewritePath=/tourists/(?<path>.*), /$\{path}
+        - id: flight-service
+          uri: lb://flight-service
+          predicates:
+            - Path=/flights/**
+          filters:
+            - RewritePath=/flights/(?<path>.*), /$\{path}
+        - id: ticket-service
+          uri: lb://ticket-service
+          predicates:
+            - Path=/tickets/**
+          filters:
+            - RewritePath=/tickets/(?<path>.*), /$\{path}
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+server:
+  port: 9000
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+

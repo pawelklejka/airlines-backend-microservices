@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface TicketService<T, ID> {
     List<T> findAllByFlightId(ID flightId);
+    List<T> findAllByTouristId(ID touristId);
+    List<T> findAll();
     T findById(ID ticketId);
     void save(TicketDTO touristDTO);
     void update(ID ticketId, TicketDTO ticket);

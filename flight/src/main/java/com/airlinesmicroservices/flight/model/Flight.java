@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document
@@ -27,6 +28,10 @@ public class Flight {
     private BigDecimal price;
 
     private List<String> touristIds;
+
+    public Flight(){
+        this.touristIds = new ArrayList<>();
+    }
 
     public String getFlightId() {
         return flightId;
