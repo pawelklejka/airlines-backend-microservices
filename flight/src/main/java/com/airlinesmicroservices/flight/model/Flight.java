@@ -8,7 +8,9 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Document
 public class Flight {
@@ -27,10 +29,10 @@ public class Flight {
     private Integer touristAmount;
     private BigDecimal price;
 
-    private List<String> touristIds;
+    private Set<String> touristIds;
 
     public Flight(){
-        this.touristIds = new ArrayList<>();
+        this.touristIds = new HashSet<>();
     }
 
     public String getFlightId() {
@@ -97,11 +99,11 @@ public class Flight {
         this.price = price;
     }
 
-    public List<String> getTouristIds() {
+    public Set<String> getTouristIds() {
         return touristIds;
     }
 
-    public void setTouristIds(List<String> touristIds) {
+    public void setTouristIds(Set<String> touristIds) {
         this.touristIds = touristIds;
     }
 }
