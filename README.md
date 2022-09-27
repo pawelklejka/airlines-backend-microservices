@@ -16,3 +16,16 @@ https://github.com/pawelklejka/airlines-frontend
 
 #### To get all the endpoints you can use visit:
 - ``` {GATEWAY_URL}/swagger-ui.html ```
+
+![swagger](https://user-images.githubusercontent.com/24233415/192568981-e41c7df5-eb15-4d24-a753-9cdbe3456b08.png)
+
+#### To visit RabbitMQ firstly:
+- ``` docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.10-management ```
+#### Then visit and type in username and password:
+- ``` localhost:15672 ```
+- ``` username: guest ```
+- ``` password: guest ```
+
+
+![rabbit](https://user-images.githubusercontent.com/24233415/192576195-06c5eff3-5420-4da1-89f5-ab901a72e4ad.png)
+
