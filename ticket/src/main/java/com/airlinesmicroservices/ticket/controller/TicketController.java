@@ -5,8 +5,6 @@ import com.airlinesmicroservices.ticket.model.Ticket;
 import com.airlinesmicroservices.ticket.service.TicketService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.net.http.HttpRequest;
 import java.util.List;
 
 @RestController

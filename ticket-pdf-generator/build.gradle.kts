@@ -7,48 +7,34 @@
 plugins {
     `java-library`
     `maven-publish`
-}
-
-repositories {
-    mavenLocal()
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
+    kotlin("jvm")
 }
 
 dependencies {
-    api(libs.org.springframework.boot.spring.boot.starter.thymeleaf)
-    api(libs.org.springframework.cloud.spring.cloud.starter.config)
-    api(libs.ognl.ognl)
-    api(libs.com.itextpdf.itextpdf)
-    api(libs.com.itextpdf.html2pdf)
-    api(libs.com.itextpdf.kernel)
-    api(libs.com.itextpdf.tool.xmlworker)
-    api(libs.org.springframework.boot.spring.boot.starter.web)
-    api(libs.org.springframework.boot.spring.boot.starter.amqp)
-    api(libs.org.springframework.cloud.spring.cloud.starter.netflix.eureka.client)
-    api(libs.org.springframework.cloud.spring.cloud.starter.openfeign)
-    api(libs.io.springfox.springfox.boot.starter)
-    testImplementation(libs.org.springframework.boot.spring.boot.starter.test)
-    testImplementation(libs.org.springframework.amqp.spring.rabbit.test)
-    testImplementation(libs.org.springdoc.springdoc.openapi.webmvc.core)
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("ognl:ognl")
+    implementation("com.itextpdf:itextpdf")
+    implementation("com.itextpdf:html2pdf")
+    implementation("com.itextpdf:kernel")
+    implementation("com.itextpdf.tool:xmlworker")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.amqp:spring-rabbit-test")
 }
 
-group = "com.airlinesmicroservices"
-version = "0.0.1-SNAPSHOT"
-description = "ticket-pdf-generator"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-
-publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
-    }
+tasks.bootJar {
+    launchScript()
 }
 
-tasks.withType<JavaCompile>() {
+tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-tasks.withType<Javadoc>() {
+tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
 }

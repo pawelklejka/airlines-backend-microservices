@@ -7,40 +7,26 @@
 plugins {
     `java-library`
     `maven-publish`
-}
-
-repositories {
-    mavenLocal()
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
+    kotlin("jvm")
 }
 
 dependencies {
-    api(libs.org.springframework.cloud.spring.cloud.starter.gateway)
-    api(libs.org.springframework.cloud.spring.cloud.starter.config)
-    api(libs.org.springframework.cloud.spring.cloud.starter.netflix.eureka.client)
-    api(libs.org.springframework.cloud.spring.cloud.starter.openfeign)
-    api(libs.org.springdoc.springdoc.openapi.webflux.core)
-    api(libs.org.springdoc.springdoc.openapi.webflux.ui)
-    testImplementation(libs.org.springframework.boot.spring.boot.starter.test)
+    implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
-group = "com.airlines"
-version = "0.0.1-SNAPSHOT"
-description = "gateway"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-
-publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
-    }
+tasks.bootJar {
+    launchScript()
 }
 
-tasks.withType<JavaCompile>() {
+tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-tasks.withType<Javadoc>() {
+tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
 }

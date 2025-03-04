@@ -1,10 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="21" />
+    <annotationProcessing>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.36/5a30490a6e14977d97d9c73c924c1f1b5311ea95/lombok-1.18.36.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-configuration-processor/3.4.3/a858f31605a612bf649adfe49c000f530d5c27c/spring-boot-configuration-processor-3.4.3.jar" />
+        </processorPath>
+        <module name="airlines-backend-microservices.ticket-pdf-generator.main" />
+        <module name="airlines-backend-microservices.config-service.main" />
+        <module name="airlines-backend-microservices.ticket.main" />
+        <module name="airlines-backend-microservices.tourist.main" />
+        <module name="airlines-backend-microservices.flight.main" />
+        <module name="airlines-backend-microservices.eureka-server-discovery.main" />
+        <module name="airlines-backend-microservices.mail-sender.main" />
+        <module name="airlines-backend-microservices.gateway.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="21">
+      <module name="build-logic" target="23" />
+      <module name="build-logic.main" target="23" />
+      <module name="build-logic.test" target="23" />
+      <module name="config-service" target="17" />
+      <module name="config-service.main" target="17" />
+      <module name="config-service.test" target="17" />
+      <module name="eureka-server-discovery" target="17" />
+      <module name="eureka-server-discovery.main" target="17" />
+      <module name="eureka-server-discovery.test" target="17" />
+      <module name="flight" target="1.8" />
+      <module name="flight.main" target="1.8" />
+      <module name="flight.test" target="1.8" />
+      <module name="gateway" target="1.8" />
+      <module name="gateway.main" target="1.8" />
+      <module name="gateway.test" target="1.8" />
+      <module name="mail-sender" target="1.8" />
+      <module name="mail-sender.main" target="1.8" />
+      <module name="mail-sender.test" target="1.8" />
+      <module name="ticket" target="1.8" />
+      <module name="ticket-pdf-generator" target="1.8" />
+      <module name="ticket-pdf-generator.main" target="1.8" />
+      <module name="ticket-pdf-generator.test" target="1.8" />
+      <module name="ticket.main" target="1.8" />
+      <module name="ticket.test" target="1.8" />
+      <module name="tourist" target="17" />
+      <module name="tourist.main" target="17" />
+      <module name="tourist.test" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="airlines-backend-microservices.config-service" options="-parameters" />
+      <module name="airlines-backend-microservices.config-service.main" options="-parameters" />
+      <module name="airlines-backend-microservices.config-service.test" options="-parameters" />
+      <module name="airlines-backend-microservices.eureka-server-discovery" options="-parameters" />
+      <module name="airlines-backend-microservices.eureka-server-discovery.main" options="-parameters" />
+      <module name="airlines-backend-microservices.eureka-server-discovery.test" options="-parameters" />
+      <module name="airlines-backend-microservices.flight" options="-parameters" />
+      <module name="airlines-backend-microservices.flight.main" options="-parameters" />
+      <module name="airlines-backend-microservices.flight.test" options="-parameters" />
+      <module name="airlines-backend-microservices.gateway" options="-parameters" />
+      <module name="airlines-backend-microservices.gateway.main" options="-parameters" />
+      <module name="airlines-backend-microservices.gateway.test" options="-parameters" />
+      <module name="airlines-backend-microservices.mail-sender" options="-parameters" />
+      <module name="airlines-backend-microservices.mail-sender.main" options="-parameters" />
+      <module name="airlines-backend-microservices.mail-sender.test" options="-parameters" />
+      <module name="airlines-backend-microservices.ticket" options="-parameters" />
+      <module name="airlines-backend-microservices.ticket-pdf-generator" options="-parameters" />
+      <module name="airlines-backend-microservices.ticket-pdf-generator.main" options="-parameters" />
+      <module name="airlines-backend-microservices.ticket-pdf-generator.test" options="-parameters" />
+      <module name="airlines-backend-microservices.ticket.main" options="-parameters" />
+      <module name="airlines-backend-microservices.ticket.test" options="-parameters" />
+      <module name="airlines-backend-microservices.tourist" options="-parameters" />
+      <module name="airlines-backend-microservices.tourist.main" options="-parameters" />
+      <module name="airlines-backend-microservices.tourist.test" options="-parameters" />
       <module name="config-service" options="-parameters" />
       <module name="eureka-server-discovery" options="-parameters" />
     </option>

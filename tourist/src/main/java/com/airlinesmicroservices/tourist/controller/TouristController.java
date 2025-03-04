@@ -3,20 +3,14 @@ package com.airlinesmicroservices.tourist.controller;
 import com.airlinesmicroservices.tourist.DTO.TouristDTO;
 import com.airlinesmicroservices.tourist.model.Tourist;
 import com.airlinesmicroservices.tourist.service.TouristService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")

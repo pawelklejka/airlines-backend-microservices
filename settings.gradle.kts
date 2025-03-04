@@ -6,15 +6,38 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 
-pluginManagement {
-    // Include 'plugins build' to define convention plugins.
-    includeBuild("build-logic")
-}
-
-plugins {
-    // Apply the foojay-resolver plugin to allow automatic download of JDKs
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
-}
-
 rootProject.name = "airlines-backend-microservices"
-include("app", "list", "utilities")
+
+pluginManagement {
+    val springBootVersion: String by settings
+    val springDependencyManagementVersion: String by settings
+    val kotlinVersion: String by settings
+    val gradleGitVersion: String by settings
+    val gradleDockerVersion: String by settings
+    val swaggerGeneratorVersion: String by settings
+    val openApiGeneratorPluginVersion: String by settings
+    plugins {
+        id("org.springframework.boot") version springBootVersion
+        id("io.spring.dependency-management") version springDependencyManagementVersion
+        kotlin("jvm") version kotlinVersion
+        id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
+        id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
+        id("org.jetbrains.kotlin.plugin.allopen") version kotlinVersion
+        id("com.gorylenko.gradle-git-properties") version gradleGitVersion
+        id("org.hidetake.swagger.generator") version swaggerGeneratorVersion
+        id("com.bmuschko.docker-spring-boot-application") version gradleDockerVersion
+        id("org.openapi.generator") version openApiGeneratorPluginVersion
+    }
+}
+
+//libs
+include(
+    "config-service",
+    "eureka-server-discovery",
+    "flight",
+    "gateway",
+    "mail-sender",
+    "ticket",
+    "ticket-pdf-generator",
+    "tourist",
+)

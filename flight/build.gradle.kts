@@ -7,43 +7,35 @@
 plugins {
     `java-library`
     `maven-publish`
-}
-
-repositories {
-    mavenLocal()
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
+    kotlin("jvm")
 }
 
 dependencies {
-    api(libs.org.springframework.boot.spring.boot.starter.data.mongodb)
-    api(libs.org.springframework.cloud.spring.cloud.starter.config)
-    api(libs.org.springframework.boot.spring.boot.starter.web)
-    api(libs.org.springframework.boot.spring.boot.starter.amqp)
-    api(libs.org.springframework.cloud.spring.cloud.starter.netflix.eureka.client)
-    api(libs.org.springframework.cloud.spring.cloud.starter.openfeign)
-    api(libs.io.springfox.springfox.boot.starter)
-    testImplementation(libs.org.springframework.boot.spring.boot.starter.test)
-    testImplementation(libs.org.springframework.amqp.spring.rabbit.test)
-    testImplementation(libs.org.springdoc.springdoc.openapi.webmvc.core)
+    // Spring Boot Starters
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
+
+    // Spring Cloud Starters (versions managed via the BOM from the root)
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+
+    // Swagger / API Documentation
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
+
+    // Additional Test Dependencies
+    testImplementation("org.springframework.amqp:spring-rabbit-test")
 }
 
-group = "com.airlinesmicroservices"
-version = "0.0.1-SNAPSHOT"
-description = "flight"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-
-publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
-    }
+tasks.bootJar {
+    launchScript()
 }
 
-tasks.withType<JavaCompile>() {
+tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-tasks.withType<Javadoc>() {
+tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
 }
