@@ -2,15 +2,14 @@ package com.airlinesmicroservices.flight.controller;
 
 import com.airlinesmicroservices.flight.model.Flight;
 import com.airlinesmicroservices.flight.service.FlightService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/flights")

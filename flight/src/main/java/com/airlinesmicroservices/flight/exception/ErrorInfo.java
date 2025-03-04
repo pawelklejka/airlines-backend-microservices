@@ -1,13 +1,6 @@
 package com.airlinesmicroservices.flight.exception;
 
-public class ErrorInfo {
-    private String message;
 
-    public ErrorInfo(String message) {
-        this.message = message;
-    }
+public record ErrorInfo(String message) {
 
-    public String getMessage() {
-        return message;
-    }
 }

@@ -1,13 +1,6 @@
 package com.airlinesmicroservices.tourist.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Objects;
+import jakarta.validation.constraints.NotBlank;
 
 
 public class TicketReadModel {
