@@ -5,10 +5,13 @@
  * Learn more about Gradle by exploring our Samples at https://docs.gradle.org/8.12.1/samples
  * This project uses @Incubating APIs which are subject to change.
  */
+import com.bmuschko.gradle.docker.DockerExtension
+import com.bmuschko.gradle.docker.DockerSpringBootApplication
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import io.spring.gradle.dependencymanagement.dsl.ImportsHandler
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.dsl.SpringBootExtension
+import com.bmuschko.gradle.docker.tasks.DockerInfo
 
 buildscript {
     repositories {
@@ -20,9 +23,10 @@ plugins {
     java
     `java-library`
     `maven-publish`
+    id("com.bmuschko.docker-spring-boot-application") apply false
     id("org.springframework.boot") apply false
     id("io.spring.dependency-management") apply false
-    id("com.bmuschko.docker-spring-boot-application") apply false
+    id("com.bmuschko.docker-remote-api") apply false
     id("org.openapi.generator") apply false
     kotlin("jvm") apply false
     kotlin("plugin.spring") apply false
@@ -31,12 +35,16 @@ plugins {
 }
 
 allprojects {
-    group = "com.airlines-microservices"
+    group = "airlines-backend-microservices"
     version =
         if (project.properties["version"]!! == "unspecified") "local-SNAPSHOT" else project.properties["version"]!!
 }
 
 subprojects {
+    apply(plugin = "com.bmuschko.docker-remote-api")
+
+    tasks.register<DockerInfo>("dockerInfo")
+
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
             freeCompilerArgs.addAll("-Xjsr305=strict", "-Xallow-result-return-type")
@@ -45,12 +53,10 @@ subprojects {
     }
 }
 
-
-
 configure(
     allprojects.filter {
         it.path !in setOf(
-            ":airlines-microservices",
+            ":airlines-backend-microservices",
         )
     }
 ) {
@@ -93,7 +99,7 @@ configure(
         implementation("com.google.guava:guava:${property("guavaVersion")}")
         implementation("org.springframework.boot:spring-boot-starter-amqp:${property("amqpVersion")}")
         testImplementation("org.springframework.amqp:spring-rabbit-test:${property("rabbitTestVersion")}")
-
+        testImplementation("org.springframework.boot:spring-boot-starter-test:${property("springBootStarterTest")}")
 
         compileOnly("org.projectlombok:lombok")
         annotationProcessor("org.projectlombok:lombok")
@@ -133,10 +139,15 @@ configure(
         plugin("io.spring.dependency-management")
         plugin("maven-publish")
         plugin("org.openapi.generator")
+        plugin("com.bmuschko.docker-spring-boot-application")
     }
 
     configure<SpringBootExtension> {
         buildInfo()
+    }
+
+    configure<DockerExtension> {
+        url.set("unix:///run/user/1000/podman/podman.sock")
     }
 
     publishing {

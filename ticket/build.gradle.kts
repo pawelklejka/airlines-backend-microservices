@@ -1,6 +1,7 @@
 plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
+    id("com.bmuschko.docker-spring-boot-application")
     kotlin("jvm")
 }
 
@@ -12,7 +13,6 @@ dependencies {
 
     // Spring Cloud Starters (versions managed via the BOM imported in the root)
     implementation("org.springframework.cloud:spring-cloud-starter-config")
-    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
     // OpenAPI Documentation – latest version per Maven Repository
@@ -33,4 +33,23 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
+}
+
+docker {
+    val registryUrl = "default-route-openshift-image-registry.apps-crc.testing"
+    val registryProject = "airlines-backend-microservices"
+    val moduleName = project.name
+
+    springBootApplication {
+        baseImage.set("amazoncorretto:21")
+        var images = setOf(
+            "${registryUrl}/$registryProject/airlines-$moduleName:${version}",
+        )
+        if (version == "develop-SNAPSHOT") {
+            images = images.plus("${registryUrl}/$registryProject/airlines-$moduleName:latest")
+        }
+        this.images.set(
+            images,
+        )
+    }
 }

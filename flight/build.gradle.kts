@@ -39,3 +39,22 @@ tasks.withType<JavaCompile> {
 tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
 }
+
+docker {
+    val registryUrl = "default-route-openshift-image-registry.apps-crc.testing"
+    val registryProject = "airlines-backend-microservices"
+    val moduleName = project.name
+
+    springBootApplication {
+        baseImage.set("amazoncorretto:21")
+        var images = setOf(
+            "${registryUrl}/$registryProject/airlines-$moduleName:${version}",
+        )
+        if (version == "develop-SNAPSHOT") {
+            images = images.plus("${registryUrl}/$registryProject/airlines-$moduleName:latest")
+        }
+        this.images.set(
+            images,
+        )
+    }
+}
