@@ -22,7 +22,6 @@ plugins {
     `maven-publish`
     id("org.springframework.boot") apply false
     id("io.spring.dependency-management") apply false
-    id("com.gorylenko.gradle-git-properties") apply false
     id("com.bmuschko.docker-spring-boot-application") apply false
     id("org.openapi.generator") apply false
     kotlin("jvm") apply false
@@ -42,11 +41,6 @@ subprojects {
         compilerOptions {
             freeCompilerArgs.addAll("-Xjsr305=strict", "-Xallow-result-return-type")
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
-        }
-    }
-    configurations.all {
-        resolutionStrategy {
-            failOnVersionConflict()
         }
     }
 }
@@ -89,10 +83,6 @@ configure(
         implementation("org.apache.commons:commons-collections4:${property("commonsCollections4Version")}")
         implementation("com.sun.xml.bind:jaxb-impl:${property("jaxbImplVersion")}")
         implementation("commons-io:commons-io:${property("commonsIoVersion")}")
-        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-        implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-        implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
-        implementation("com.fasterxml.jackson.datatype:jackson-datatype-guava")
         implementation("ognl:ognl:${property("ognlVersion")}")
         implementation("com.itextpdf:itextpdf:${property("itextPdfVersion")}")
         implementation("com.itextpdf:html2pdf:${property("html2PdfVersion")}")
@@ -111,8 +101,8 @@ configure(
     }
 
     configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
 
@@ -132,7 +122,6 @@ val bootableModules = setOf(
     ":ticket-pdf-generator",
     ":gateway",
     ":config-service",
-    ":eureka-server-discovery",
 )
 
 configure(
@@ -143,7 +132,6 @@ configure(
         plugin("org.springframework.boot")
         plugin("io.spring.dependency-management")
         plugin("maven-publish")
-        plugin("com.gorylenko.gradle-git-properties")
         plugin("org.openapi.generator")
     }
 
