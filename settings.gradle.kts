@@ -33,7 +33,6 @@ pluginManagement {
 //libs
 include(
     "config-service",
-    "eureka-server-discovery",
     "flight",
     "gateway",
     "mail-sender",

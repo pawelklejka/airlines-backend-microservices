@@ -13,12 +13,13 @@
         <module name="airlines-backend-microservices.ticket.main" />
         <module name="airlines-backend-microservices.tourist.main" />
         <module name="airlines-backend-microservices.flight.main" />
-        <module name="airlines-backend-microservices.eureka-server-discovery.main" />
         <module name="airlines-backend-microservices.mail-sender.main" />
         <module name="airlines-backend-microservices.gateway.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="21">
+      <module name="airlines-backend-microservices.eureka-server-discovery.main" target="17" />
+      <module name="airlines-backend-microservices.eureka-server-discovery.test" target="17" />
       <module name="build-logic" target="23" />
       <module name="build-logic.main" target="23" />
       <module name="build-logic.test" target="23" />
