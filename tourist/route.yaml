@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: airlines-tourist
+  namespace: airlines-backend-microservices
+spec:
+  to:
+    kind: Service
+    name: airlines-tourist
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge

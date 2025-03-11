@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airlines-mail-sender
+  namespace: airlines-backend-microservices
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: airlines-mail-sender
+  template:
+    metadata:
+      labels:
+        app: airlines-mail-sender
+    spec:
+      containers:
+        - name: airlines-mail-sender
+          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-mail-sender:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: airlines-mail-sender-config
+            - secretRef:
+                name: airlines-mail-sender-secrets

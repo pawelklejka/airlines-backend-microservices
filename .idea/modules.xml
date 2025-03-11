@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/config-service/airlines-backend-microservices.config-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/config-service/airlines-backend-microservices.config-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/flight/airlines-backend-microservices.flight.main.iml" filepath="$PROJECT_DIR$/.idea/modules/flight/airlines-backend-microservices.flight.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gateway/airlines-backend-microservices.gateway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/gateway/airlines-backend-microservices.gateway.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/mail-sender/airlines-backend-microservices.mail-sender.main.iml" filepath="$PROJECT_DIR$/.idea/modules/mail-sender/airlines-backend-microservices.mail-sender.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ticket-pdf-generator/airlines-backend-microservices.ticket-pdf-generator.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ticket-pdf-generator/airlines-backend-microservices.ticket-pdf-generator.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ticket/airlines-backend-microservices.ticket.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ticket/airlines-backend-microservices.ticket.main.iml" />

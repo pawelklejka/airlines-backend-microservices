@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: airlines-mail-sender
+  namespace: airlines-mail-sender-microservices
+spec:
+  to:
+    kind: Service
+    name: airlines-mail-sender
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airlines-flight
+  namespace: airlines-backend-microservices
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: airlines-flight
+  template:
+    metadata:
+      labels:
+        app: airlines-flight
+    spec:
+      containers:
+        - name: airlines-flight
+          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-flight:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: airlines-flight-config
+            - secretRef:
+                name: airlines-flight-secrets
