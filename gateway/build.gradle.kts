@@ -19,9 +19,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
-tasks.bootJar {
-    launchScript()
-}
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"

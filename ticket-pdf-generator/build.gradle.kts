@@ -20,11 +20,11 @@ dependencies {
     implementation("com.itextpdf.tool:xmlworker")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-amqp")
-    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.amqp:spring-rabbit-test")
+
 }
 
 tasks.bootJar {
@@ -46,6 +46,8 @@ docker {
 
     springBootApplication {
         baseImage.set("amazoncorretto:21")
+        jvmArgs.set(listOf("-Duser.name=developer"))
+
         var images = setOf(
             "${registryUrl}/$registryProject/airlines-$moduleName:${version}",
         )

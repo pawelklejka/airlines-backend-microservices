@@ -6,7 +6,6 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 import com.bmuschko.gradle.docker.DockerExtension
-import com.bmuschko.gradle.docker.DockerSpringBootApplication
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import io.spring.gradle.dependencymanagement.dsl.ImportsHandler
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -120,15 +119,21 @@ configure(
     tasks.named("clean").get().dependsOn("deleteGenSrc")
 }
 
-val bootableModules = setOf(
+val bootableModules: Set<String> = setOf(
     ":tourist",
     ":ticket",
     ":flight",
     ":mail-sender",
-    ":ticket-pdf-generator",
-    ":gateway",
-    ":config-service",
+    ":ticket-pdf-generator"
 )
+
+
+// Register the standalone task from buildSrc
+tasks.register<DockerPushAllTask>("dockerPushAll") {
+    val listOfBootableModules = bootableModules.toList()
+    modules.set(listOfBootableModules)
+}
+
 
 configure(
     allprojects.filter { it.path in bootableModules }
@@ -148,6 +153,11 @@ configure(
 
     configure<DockerExtension> {
         url.set("unix:///run/user/1000/podman/podman.sock")
+        registryCredentials {
+            url.set("default-route-openshift-image-registry.apps-crc.testing")
+            username.set("developer")
+            password.set(System.getenv("OPENSHIFT_TOKEN") ?: "sha256~iURH-xEDPc-QgkuMIJfEZO0ILHB6w7_su79ZRNn4viA")
+        }
     }
 
     publishing {
