@@ -3,11 +3,15 @@
 # Set namespace/project
 NAMESPACE="airlines-backend-microservices"
 
-# Define infrastructure services (Kafka, Keycloak, ELK)
+# Define infrastructure services **in the correct order**
 INFRA_SERVICES=(
-    "keycloak"
-    "elk"
-    "kafka"
+    "postgres"    # PostgreSQL must start first
+    "keycloak"    # Keycloak depends on PostgreSQL
+    "kafka"       # Kafka starts after Keycloak
+    "elasticsearch"
+    "kibana"
+    "logstash"
+    "jaeger"
 )
 
 # Define microservices to deploy (these depend on infrastructure)
@@ -19,8 +23,9 @@ BOOTABLE_MODULES=(
     "ticket-pdf-generator"
 )
 
-# OpenShift registry URL (CRC default)
-REGISTRY_URL="default-route-openshift-image-registry.apps-crc.testing"
+# **Ensure we use the correct infrastructure path**
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+INFRA_PATH="$SCRIPT_DIR/../openshift/base/infrastructure"  # Adjusted path for infrastructure
 
 # Ensure we are logged into OpenShift
 echo "🔐 Logging into OpenShift..."
@@ -34,66 +39,73 @@ fi
 echo "📦 Creating/OpenShift namespace: $NAMESPACE"
 oc new-project $NAMESPACE --skip-config-write &>/dev/null || oc project $NAMESPACE
 
-# Function to deploy a single service
+# Function to deploy a single microservice
 deploy_service() {
     SERVICE=$1
-    echo "🚀 Deploying microservice: $SERVICE..."
+    echo "🚀 Deploying microservice: airlines-$SERVICE..."
+
+    SERVICE_PATH="$SCRIPT_DIR/../$SERVICE"  # Adjusted path for microservices
 
     for FILE in configmap.yaml secret.yaml deployment.yaml service.yaml route.yaml; do
-        FILE_PATH="$SERVICE/$FILE"
+        FILE_PATH="$SERVICE_PATH/$FILE"
         if [ -f "$FILE_PATH" ]; then
-            echo "📜 Applying $FILE for $SERVICE..."
+            echo "📜 Applying $FILE for airlines-$SERVICE..."
             oc apply -f "$FILE_PATH"
         else
-            echo "⚠️ Warning: $FILE not found for $SERVICE, skipping..."
+            echo "⚠️ Warning: $FILE not found for airlines-$SERVICE, skipping..."
         fi
     done
 
     # Ensure the service exists before exposing the route
-    oc get service airlines-$SERVICE -n $NAMESPACE &>/dev/null
+    oc get service airlines-$SERVICE-service -n $NAMESPACE &>/dev/null
     if [ $? -ne 0 ]; then
-        echo "❌ Service for $SERVICE does not exist, skipping route exposure."
+        echo "❌ Service for airlines-$SERVICE does not exist, skipping route exposure."
         return
     fi
 
     # Expose an OpenShift Route if it doesn't exist
     oc get route airlines-$SERVICE -n $NAMESPACE &>/dev/null
     if [ $? -ne 0 ]; then
-        echo "🌍 Exposing OpenShift Route for $SERVICE..."
-        oc expose service airlines-$SERVICE -n $NAMESPACE
+        echo "🌍 Exposing OpenShift Route for airlines-$SERVICE..."
+        oc expose service airlines-$SERVICE-service -n $NAMESPACE
     fi
 }
 
 # Function to deploy infrastructure services
 deploy_infra_services() {
     for SERVICE in "${INFRA_SERVICES[@]}"; do
-        echo "🚀 Deploying infrastructure service: $SERVICE..."
+        echo "🚀 Deploying infrastructure service: airlines-$SERVICE..."
 
-        SERVICE_PATH="openshift/$SERVICE"
+        SERVICE_PATH="$INFRA_PATH/$SERVICE"
 
         if [ -d "$SERVICE_PATH" ]; then
             for FILE in deployment.yaml service.yaml route.yaml; do
                 FILE_PATH="$SERVICE_PATH/$FILE"
                 if [ -f "$FILE_PATH" ]; then
-                    echo "📜 Applying $FILE for $SERVICE..."
+                    echo "📜 Applying $FILE for airlines-$SERVICE..."
                     oc apply -f "$FILE_PATH"
                 else
-                    echo "⚠️ Warning: $FILE not found for $SERVICE, skipping..."
+                    echo "⚠️ Warning: $FILE not found for airlines-$SERVICE, skipping..."
                 fi
             done
 
-            # Ensure the service exists before exposing the route
-            oc get service $SERVICE -n $NAMESPACE &>/dev/null
+            # Wait for service to be available
+            oc get service airlines-$SERVICE-service -n $NAMESPACE &>/dev/null
             if [ $? -ne 0 ]; then
-                echo "❌ Service for $SERVICE does not exist, skipping route exposure."
-                continue
+                echo "⏳ Waiting for service airlines-$SERVICE-service to be created..."
+                sleep 5
+                oc get service airlines-$SERVICE-service -n $NAMESPACE &>/dev/null
+                if [ $? -ne 0 ]; then
+                    echo "❌ Service for airlines-$SERVICE does not exist after retrying, skipping route exposure."
+                    continue
+                fi
             fi
 
             # Expose an OpenShift Route if it doesn't exist
-            oc get route $SERVICE -n $NAMESPACE &>/dev/null
+            oc get route airlines-$SERVICE -n $NAMESPACE &>/dev/null
             if [ $? -ne 0 ]; then
-                echo "🌍 Exposing OpenShift Route for $SERVICE..."
-                oc expose service $SERVICE -n $NAMESPACE
+                echo "🌍 Exposing OpenShift Route for airlines-$SERVICE..."
+                oc expose service airlines-$SERVICE-service -n $NAMESPACE
             fi
         else
             echo "⚠️ Warning: Directory $SERVICE_PATH not found, skipping deployment."
@@ -101,53 +113,67 @@ deploy_infra_services() {
     done
 }
 
-# Wait function for infrastructure services
+# Function to wait for a service to be ready
 wait_for_pod() {
     local SERVICE=$1
-    local MAX_RETRIES=30  # Wait up to 5 minutes
+    local MAX_RETRIES=60  # Wait up to 10 minutes
     local RETRY=0
 
-    while [[ $(oc get pods -n $NAMESPACE -l app=$SERVICE -o jsonpath='{.items[0].status.phase}' 2>/dev/null) != "Running" ]]; do
+    # Check if the service exists before waiting for a pod
+    oc get service airlines-$SERVICE-service -n $NAMESPACE &>/dev/null
+    if [ $? -ne 0 ]; then
+        echo "❌ Service airlines-$SERVICE-service does not exist! Skipping..."
+        return
+    fi
+
+    while [[ $(oc get pods -n $NAMESPACE -l app=airlines-$SERVICE -o jsonpath='{.items[0].status.phase}' 2>/dev/null) != "Running" ]]; do
         if [ $RETRY -ge $MAX_RETRIES ]; then
-            echo "❌ Timeout: $SERVICE did not start successfully."
+            echo "❌ Timeout: airlines-$SERVICE did not start successfully."
+            oc logs -f deployment/airlines-$SERVICE -n $NAMESPACE  # Show logs
             exit 1
         fi
-        echo "⏳ Waiting for $SERVICE to start... ($RETRY/$MAX_RETRIES)"
+        echo "⏳ Waiting for airlines-$SERVICE to start... ($RETRY/$MAX_RETRIES)"
         sleep 10
         ((RETRY++))
     done
-    echo "✅ $SERVICE is now running!"
+    echo "✅ airlines-$SERVICE is now running!"
 }
 
-# If a specific microservice is provided as an argument, only deploy that service
+# If a specific service is provided as an argument, only deploy that service
 if [ -n "$1" ]; then
-    SERVICE_NAME="$1"
+    SERVICE_NAME="${1#airlines-}"  # Remove "airlines-" prefix if passed by the user
 
     # Check if it's an infrastructure service
     if [[ " ${INFRA_SERVICES[@]} " =~ " ${SERVICE_NAME} " ]]; then
-        echo "🔄 Reloading infrastructure service: $SERVICE_NAME..."
+        echo "🔄 Reloading infrastructure service: airlines-$SERVICE_NAME..."
         deploy_infra_services "$SERVICE_NAME"
         exit 0
     fi
 
     # Check if it's a bootable microservice
     if [[ " ${BOOTABLE_MODULES[@]} " =~ " ${SERVICE_NAME} " ]]; then
-        echo "🔄 Reloading microservice: $SERVICE_NAME..."
+        echo "🔄 Reloading microservice: airlines-$SERVICE_NAME..."
         deploy_service "$SERVICE_NAME"
         exit 0
     fi
 
-    echo "❌ Error: $SERVICE_NAME is not a recognized service!"
+    echo "❌ Error: airlines-$SERVICE_NAME is not a recognized service!"
     exit 1
 fi
 
-# Deploy infrastructure services first
+# Deploy infrastructure services **in correct order**
 deploy_infra_services
 
-# Wait for infrastructure services before deploying microservices
-echo "⏳ Waiting for infrastructure services to become ready..."
+# Ensure PostgreSQL is ready before deploying Keycloak
+echo "⏳ Waiting for airlines-postgres to be ready..."
+wait_for_pod "postgres"
+
+# Ensure Keycloak is ready before deploying Kafka and ELK
+echo "⏳ Waiting for airlines-keycloak to be ready..."
 wait_for_pod "keycloak"
-wait_for_pod "elasticsearch"  # Part of ELK
+
+# Ensure Kafka is ready before microservices start
+echo "⏳ Waiting for airlines-kafka to be ready..."
 wait_for_pod "kafka"
 
 # Deploy all microservices

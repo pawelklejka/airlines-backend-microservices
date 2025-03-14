@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airlines-postgres
+  namespace: airlines-backend-microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airlines-postgres
+  template:
+    metadata:
+      labels:
+        app: airlines-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          env:
+            - name: POSTGRES_DB
+              value: keycloak
+            - name: POSTGRES_USER
+              value: keycloak
+            - name: POSTGRES_PASSWORD
+              value: keycloakpassword
+          ports:
+            - containerPort: 5432

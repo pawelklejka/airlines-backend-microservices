@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: airlines-kafka-service
+  namespace: airlines-backend-microservices
+  labels:
+    app: airlines-kafka
+spec:
+  selector:
+    app: airlines-kafka
+  ports:
+    - name: kafka
+      protocol: TCP
+      port: 9092
+      targetPort: 9092

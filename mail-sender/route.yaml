@@ -1,7 +1,7 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: airlines-mail-sender
+  name: airlines-mail-sender-route
   namespace: airlines-mail-sender-microservices
 spec:
   to:

@@ -1,13 +1,13 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: airlines-ticket-pdf-generator-route
+  name: airlines-elasticsearch-route
   namespace: airlines-backend-microservices
 spec:
   to:
     kind: Service
-    name: airlines-ticket-pdf-generator
+    name: airlines-elasticsearch
   port:
-    targetPort: 8080
+    targetPort: rest
   tls:
     termination: edge

@@ -4,19 +4,11 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/config-service/airlines-backend-microservices.config-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/config-service/airlines-backend-microservices.config-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/flight/airlines-backend-microservices.flight.main.iml" filepath="$PROJECT_DIR$/.idea/modules/flight/airlines-backend-microservices.flight.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gateway/airlines-backend-microservices.gateway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/gateway/airlines-backend-microservices.gateway.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/mail-sender/airlines-backend-microservices.mail-sender.main.iml" filepath="$PROJECT_DIR$/.idea/modules/mail-sender/airlines-backend-microservices.mail-sender.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ticket-pdf-generator/airlines-backend-microservices.ticket-pdf-generator.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ticket-pdf-generator/airlines-backend-microservices.ticket-pdf-generator.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ticket/airlines-backend-microservices.ticket.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ticket/airlines-backend-microservices.ticket.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/tourist/airlines-backend-microservices.tourist.main.iml" filepath="$PROJECT_DIR$/.idea/modules/tourist/airlines-backend-microservices.tourist.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gateway.iml" filepath="$PROJECT_DIR$/.idea/modules/gateway.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gateway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/gateway.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gateway.test.iml" filepath="$PROJECT_DIR$/.idea/modules/gateway.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ticket-pdf-generator.iml" filepath="$PROJECT_DIR$/.idea/modules/ticket-pdf-generator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ticket-pdf-generator.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ticket-pdf-generator.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ticket-pdf-generator.test.iml" filepath="$PROJECT_DIR$/.idea/modules/ticket-pdf-generator.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tourist.iml" filepath="$PROJECT_DIR$/.idea/modules/tourist.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tourist.main.iml" filepath="$PROJECT_DIR$/.idea/modules/tourist.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tourist.test.iml" filepath="$PROJECT_DIR$/.idea/modules/tourist.test.iml" />
     </modules>
   </component>
 </project>

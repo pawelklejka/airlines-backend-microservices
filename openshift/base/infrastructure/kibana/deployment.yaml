@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airlines-kibana
+  namespace: airlines-backend-microservices
+  labels:
+    app: airlines-kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airlines-kibana
+  template:
+    metadata:
+      labels:
+        app: airlines-kibana
+    spec:
+      containers:
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:8.5.0
+          ports:
+            - containerPort: 5601
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: "http://elasticsearch:9200"
+            - name: ELASTICSEARCH_USERNAME
+              value: "elastic"
+            - name: ELASTICSEARCH_PASSWORD
+              value: "changeme"

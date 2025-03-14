@@ -12,8 +12,10 @@
         <module name="airlines-backend-microservices.config-service.main" />
         <module name="airlines-backend-microservices.ticket.main" />
         <module name="airlines-backend-microservices.tourist.main" />
+        <module name="airlines-backend-microservices.main" />
         <module name="airlines-backend-microservices.flight.main" />
         <module name="airlines-backend-microservices.mail-sender.main" />
+        <module name="airlines-backend-microservices.gateway.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="21">

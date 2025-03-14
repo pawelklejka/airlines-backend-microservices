@@ -1,13 +1,12 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: airlines-tourist-route
-  namespace: airlines-backend-microservices
+  name: airlines-jaeger-route
 spec:
   to:
     kind: Service
-    name: airlines-tourist
+    name: airlines-jaeger
   port:
-    targetPort: 8080
+    targetPort: jaeger-ui
   tls:
     termination: edge

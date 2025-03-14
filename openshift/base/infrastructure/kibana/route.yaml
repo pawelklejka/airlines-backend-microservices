@@ -1,13 +1,13 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: airlines-ticket-pdf-generator-route
+  name: airlines-kibana-route
   namespace: airlines-backend-microservices
 spec:
   to:
     kind: Service
-    name: airlines-ticket-pdf-generator
+    name: airlines-kibana
   port:
-    targetPort: 8080
+    targetPort: http
   tls:
     termination: edge

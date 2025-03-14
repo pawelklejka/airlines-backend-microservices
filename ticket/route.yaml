@@ -1,7 +1,7 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: airlines-ticket
+  name: airlines-ticket-route
   namespace: airlines-backend-microservices
 spec:
   to:

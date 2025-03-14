@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: airlines-postgres-service
+  namespace: airlines-microservices-backend
+spec:
+  selector:
+    app: airlines-postgres
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
