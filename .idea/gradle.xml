@@ -24,7 +24,6 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/config-service" />
             <option value="$PROJECT_DIR$/flight" />
-            <option value="$PROJECT_DIR$/gateway" />
             <option value="$PROJECT_DIR$/mail-sender" />
             <option value="$PROJECT_DIR$/ticket" />
             <option value="$PROJECT_DIR$/ticket-pdf-generator" />
