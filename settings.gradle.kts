@@ -35,7 +35,6 @@ pluginManagement {
 include(
     "config-service",
     "flight",
-    "gateway",
     "mail-sender",
     "ticket",
     "ticket-pdf-generator",

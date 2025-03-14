@@ -6,11 +6,11 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 import com.bmuschko.gradle.docker.DockerExtension
+import com.bmuschko.gradle.docker.tasks.DockerInfo
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import io.spring.gradle.dependencymanagement.dsl.ImportsHandler
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.dsl.SpringBootExtension
-import com.bmuschko.gradle.docker.tasks.DockerInfo
 
 buildscript {
     repositories {
@@ -156,7 +156,7 @@ configure(
         registryCredentials {
             url.set("default-route-openshift-image-registry.apps-crc.testing")
             username.set("developer")
-            password.set(System.getenv("OPENSHIFT_TOKEN") ?: "sha256~iURH-xEDPc-QgkuMIJfEZO0ILHB6w7_su79ZRNn4viA")
+            password.set(System.getenv("OPENSHIFT_TOKEN") ?: "sha256~JgGFGIRZOw46w-uU5LoISqqQxYpqrPsqhNIlIUUP6cg")
         }
     }
 
