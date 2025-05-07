@@ -144,7 +144,7 @@ if [ -n "$1" ]; then
     SERVICE_NAME="${1#airlines-}"  # Remove "airlines-" prefix if passed by the user
 
     # Check if it's an infrastructure service
-    if [[ " ${INFRA_SERVICES[@]} " =~ " ${SERVICE_NAME} " ]]; then
+    if [[ " ${INFRA_SERVICES[*]} " =~ " ${SERVICE_NAME} " ]]; then
         echo "🔄 Reloading infrastructure service: airlines-$SERVICE_NAME..."
         deploy_infra_services "$SERVICE_NAME"
         exit 0

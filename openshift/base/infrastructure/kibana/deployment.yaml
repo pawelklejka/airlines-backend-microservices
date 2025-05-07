@@ -22,8 +22,13 @@ spec:
             - containerPort: 5601
           env:
             - name: ELASTICSEARCH_HOSTS
-              value: "http://elasticsearch:9200"
-            - name: ELASTICSEARCH_USERNAME
-              value: "elastic"
-            - name: ELASTICSEARCH_PASSWORD
-              value: "changeme"
+              value: "http://airlines-elasticsearch-service:9200"
+            # Use the service-account token instead of elastic/changeme
+            - name: ELASTICSEARCH_SERVICEACCOUNT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: kibana-service-token
+                  key: serviceAccountToken
+          # (Optional) If your cluster enforces HTTPS:
+          # - name: ELASTICSEARCH_SSL_VERIFICATIONMODE
+          #   value: none
