@@ -47,6 +47,7 @@ docker {
     springBootApplication {
         baseImage.set("amazoncorretto:21")
         jvmArgs.set(listOf("-Duser.name=developer"))
+        mainClassName.set("com.bmuschko.app.Main")
 
         var images = setOf(
             "${registryUrl}/$registryProject/airlines-$moduleName:${version}",

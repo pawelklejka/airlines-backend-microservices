@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+  namespace: airlines-backend-microservices
+data:
+  logstash.conf: |
+    # ── Logstash pipeline configuration ──
+    input {
+      beats {
+        port => 5044
+      }
+    }
+    filter {
+      # e.g. grok, date, geoip...
+    }
+    output {
+      elasticsearch {
+        hosts => ["http://airlines-elasticsearch-service:9200"]
+        # authentication if needed…
+      }
+    }

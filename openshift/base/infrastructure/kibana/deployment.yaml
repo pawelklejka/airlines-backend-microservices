@@ -28,7 +28,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: kibana-service-token
-                  key: serviceAccountToken
+                  key: service-token
           # (Optional) If your cluster enforces HTTPS:
           # - name: ELASTICSEARCH_SSL_VERIFICATIONMODE
           #   value: none

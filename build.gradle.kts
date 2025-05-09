@@ -103,6 +103,7 @@ configure(
         compileOnly("org.projectlombok:lombok")
         annotationProcessor("org.projectlombok:lombok")
         annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
     }
 
     configure<JavaPluginExtension> {
@@ -152,13 +153,13 @@ configure(
     }
 
     configure<DockerExtension> {
-        url.set("unix:///run/user/1000/podman/podman.sock")
         registryCredentials {
             url.set("default-route-openshift-image-registry.apps-crc.testing")
             username.set("developer")
-            password.set(System.getenv("OPENSHIFT_TOKEN") ?: "sha256~JgGFGIRZOw46w-uU5LoISqqQxYpqrPsqhNIlIUUP6cg")
+            password.set(System.getenv("OPENSHIFT_TOKEN") ?: "sha256~nUr8IsuOv9hEzUruoFSA3oLWFjsSLsGtjVv0KV5VIIY")
         }
     }
+
 
     publishing {
         publications {
