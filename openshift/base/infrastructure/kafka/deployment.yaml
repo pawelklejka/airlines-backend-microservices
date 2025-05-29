@@ -1,41 +1,39 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
 metadata:
   name: airlines-kafka
   namespace: airlines-backend-microservices
-  labels:
-    app: airlines-kafka
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: airlines-kafka
-  template:
-    metadata:
-      labels:
-        app: airlines-kafka
-    spec:
-      containers:
-        - name: zookeeper
-          image: wurstmeister/zookeeper
-          ports:
-            - containerPort: 2181
-          env:
-            - name: ALLOW_ANONYMOUS_LOGIN
-              value: "yes"
+  # ----- Kafka brokers -----
+  kafka:
+    version: 3.4.0
+    replicas: 1
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+    config:
+      # single-node settings
+      offsets.topic.replication.factor: 1
+      transaction.state.log.replication.factor: 1
+      transaction.state.log.min.isr: 1
+    storage:
+      type: persistent-claim
+      size: 5Gi
+      class: standard
+      deleteClaim: false
 
-        - name: airlines-kafka
-          image: wurstmeister/kafka
-          ports:
-            - containerPort: 9092
-          env:
-            - name: KAFKA_ZOOKEEPER_CONNECT
-              value: "localhost:2181"
-            - name: KAFKA_ADVERTISED_LISTENERS
-              value: "PLAINTEXT://kafka:9092"
-            - name: KAFKA_LISTENERS
-              value: "PLAINTEXT://0.0.0.0:9092"
-            - name: KAFKA_BROKER_ID
-              value: "1"
-            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
-              value: "1"
+  # ----- ZooKeeper ensemble -----
+  zookeeper:
+    replicas: 1
+    storage:
+      type: persistent-claim
+      size: 5Gi
+      class: standard
+      deleteClaim: false
+
+  # ----- Optional: auto-create topics & users -----
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}

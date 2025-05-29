@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: mongodb-route
+  namespace: airlines-backend-microservices
+spec:
+  to:
+    kind: Service
+    name: mongodb-service
+  port:
+    targetPort: mongo
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

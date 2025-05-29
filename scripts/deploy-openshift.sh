@@ -79,7 +79,7 @@ deploy_infra_services() {
         SERVICE_PATH="$INFRA_PATH/$SERVICE"
 
         if [ -d "$SERVICE_PATH" ]; then
-            for FILE in deployment.yaml service.yaml route.yaml; do
+            for FILE in deployment.yaml service.yaml route.yaml kafka-topic.yaml; do
                 FILE_PATH="$SERVICE_PATH/$FILE"
                 if [ -f "$FILE_PATH" ]; then
                     echo "📜 Applying $FILE for airlines-$SERVICE..."

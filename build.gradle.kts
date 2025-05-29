@@ -89,6 +89,7 @@ configure(
         implementation("com.sun.xml.bind:jaxb-impl:${property("jaxbImplVersion")}")
         implementation("commons-io:commons-io:${property("commonsIoVersion")}")
         implementation("ognl:ognl:${property("ognlVersion")}")
+        implementation("org.springframework.kafka:spring-kafka:${property("springKafkaVersion")}")
         implementation("com.itextpdf:itextpdf:${property("itextPdfVersion")}")
         implementation("com.itextpdf:html2pdf:${property("html2PdfVersion")}")
         implementation("com.itextpdf:kernel:${property("kernelVersion")}")
