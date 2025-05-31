@@ -1,0 +1,128 @@
+name: Move project card to Done on PR merge
+
+# Trigger this workflow when a pull request is closed (merged or just closed)
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read             # Only need read-access to find matching Issue
+  repository-projects: write  # Required to move cards in a classic Project
+
+jobs:
+  move_card_to_done:
+    # Only run if the PR was actually merged (not just closed)
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install jq for JSON parsing
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Get source branch name from PR
+        id: get_branch_from_pr
+        run: |
+          # github.event.pull_request.head.ref is the name of the branch that was merged
+          SOURCE_BRANCH="${{ github.event.pull_request.head.ref }}"
+          echo "BRANCH_NAME=$SOURCE_BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Check if source branch matches pattern feature/BE-<NUM>
+        id: check_pattern
+        run: |
+          BRANCH="${{ steps.get_branch_from_pr.outputs.BRANCH_NAME }}"
+          # Regex: starts with "feature/BE-" followed by digits
+          if [[ "$BRANCH" =~ ^feature/BE-([0-9]+) ]]; then
+            ISSUE_CUSTOM_ID="${BASH_REMATCH[1]}"
+            echo "ISSUE_CUSTOM_ID=$ISSUE_CUSTOM_ID" >> $GITHUB_OUTPUT
+            echo "PATTERN_MATCH=true" >> $GITHUB_OUTPUT
+          else
+            echo "PATTERN_MATCH=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Exit if source branch does not match pattern
+        if: steps.check_pattern.outputs.PATTERN_MATCH == 'false'
+        run: |
+          echo "PR source branch does not match 'feature/BE-<number>'. Exiting."
+          exit 0
+
+      - name: Find GitHub Issue number by title “[BE-<NUM>]”
+        id: find_issue_by_title
+        run: |
+          OWNER="${{ github.repository_owner }}"
+          REPO="${{ github.repository_name }}"
+          CUSTOM_ID="${{ steps.check_pattern.outputs.ISSUE_CUSTOM_ID }}"
+
+          # Fetch up to 100 issues (open and closed); add pagination if you have >100 issues
+          ALL_ISSUES_JSON=$(gh api \
+            --method GET \
+            -H "Accept: application/vnd.github.v3+json" \
+            "/repos/$OWNER/$REPO/issues?state=all&per_page=100")
+
+          # Look for the first issue whose title starts with “[BE-<CUSTOM_ID>]”
+          GH_NUMBER=$(echo "$ALL_ISSUES_JSON" \
+            | jq -r ".[] 
+                | select((.title | test(\"^\\\\[BE-${CUSTOM_ID}\\\\]\"))) 
+                | .number" \
+            | head -n1)
+
+          if [ -z "$GH_NUMBER" ] || [ "$GH_NUMBER" == "null" ]; then
+            echo "No issue found with title starting '[BE-$CUSTOM_ID]'."
+            echo "::set-output name=gh_issue_number::none"
+          else
+            echo "Found GitHub Issue #$GH_NUMBER for [BE-$CUSTOM_ID]."
+            echo "::set-output name=gh_issue_number::$GH_NUMBER"
+          fi
+
+      - name: Exit if no matching Issue was found
+        if: steps.find_issue_by_title.outputs.gh_issue_number == 'none'
+        run: |
+          echo "Could not find Issue with title '[BE-${{ steps.check_pattern.outputs.ISSUE_CUSTOM_ID }}]'. Exiting."
+          exit 0
+
+      - name: Locate card for Issue in In Progress column
+        id: find_card
+        run: |
+          GH_NUM="${{ steps.find_issue_by_title.outputs.gh_issue_number }}"
+          REPO="${{ github.repository }}"
+          PROJECT_NUMBER=<NUMER_PROJEKTU>
+          IN_PROGRESS_COLUMN_ID=<ID_KOLUMNY_IN_PROGRESS>
+
+          # Get all cards in the In Progress column
+          CARDS_JSON=$(gh api \
+            --method GET \
+            -H "Accept: application/vnd.github.v3+json" \
+            "/repos/$REPO/projects/$PROJECT_NUMBER/columns/$IN_PROGRESS_COLUMN_ID/cards")
+
+          # Look for the card whose content_url ends with "/issues/$GH_NUM"
+          CARD_ID=$(echo "$CARDS_JSON" \
+            | jq -r ".[] 
+                | select(.content_url==\"https://api.github.com/repos/$REPO/issues/$GH_NUM\") 
+                | .id")
+
+          if [ -z "$CARD_ID" ] || [ "$CARD_ID" == "null" ]; then
+            echo "No card found for Issue #$GH_NUM in In Progress."
+            echo "::set-output name=card::none"
+          else
+            echo "Found card with ID: $CARD_ID"
+            echo "::set-output name=card::$CARD_ID"
+          fi
+
+      - name: Move the card to the Done column
+        if: steps.find_card.outputs.card != 'none'
+        run: |
+          CARD_ID="${{ steps.find_card.outputs.card }}"
+          DONE_COLUMN_ID=<ID_KOLUMNY_DONE>
+
+          echo "Moving card ID $CARD_ID to Done column."
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            "/projects/columns/cards/$CARD_ID/moves" \
+            -f column_id="$DONE_COLUMN_ID" \
+            -f position="top"
+
+          echo "Issue card has been moved to Done."
