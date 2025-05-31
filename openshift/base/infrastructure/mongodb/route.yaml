@@ -1,12 +1,12 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: mongodb-route
+  name: airlines-mongodb-route
   namespace: airlines-backend-microservices
 spec:
   to:
     kind: Service
-    name: mongodb-service
+    name: airlines-mongodb-service
   port:
     targetPort: mongo
   tls:

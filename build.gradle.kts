@@ -157,7 +157,7 @@ configure(
         registryCredentials {
             url.set("default-route-openshift-image-registry.apps-crc.testing")
             username.set("developer")
-            password.set(System.getenv("OPENSHIFT_TOKEN") ?: "sha256~nUr8IsuOv9hEzUruoFSA3oLWFjsSLsGtjVv0KV5VIIY")
+            password.set(System.getenv("OPENSHIFT_TOKEN") ?: "sha256~7XQfVYUcbQRWytHN-b_Iaf-cKJlHFdzzrxyOTkU3wlo")
         }
     }
 

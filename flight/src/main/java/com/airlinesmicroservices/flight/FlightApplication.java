@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
-@EnableDiscoveryClient
 @OpenAPIDefinition(info =
 @Info(title = "Flight API", version = "1.0", description = "Documentation Flight API v1.0")
 )

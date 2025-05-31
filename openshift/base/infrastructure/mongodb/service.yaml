@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb-service
+  name: airlines-mongodb-service
   namespace: airlines-backend-microservices
 spec:
-  clusterIP: None                      # headless, gives stable DNS per pod
+  clusterIP: None                     # headless service for StatefulSet DNS
   ports:
-    - name: mongo
+    - name: airlines-mongodb
       port: 27017
-      targetPort: mongo
+      targetPort: 27017
   selector:
-    app: mongodb                       # picks up the StatefulSet’s Pods
+    app: airlines-mongodb                      # picks up the StatefulSet Pods

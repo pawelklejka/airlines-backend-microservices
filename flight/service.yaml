@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: airlines-flight-route
+  name: airlines-flight-service
   namespace: airlines-backend-microservices
 spec:
   selector:

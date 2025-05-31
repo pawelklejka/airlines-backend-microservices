@@ -6,7 +6,7 @@ metadata:
 spec:
   to:
     kind: Service
-    name: airlines-tourist
+    name: airlines-tourist-service
   port:
     targetPort: 8080
   tls:

@@ -1,12 +1,12 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: airlines-flight-service
+  name: airlines-flight-route
   namespace: airlines-backend-microservices
 spec:
   to:
     kind: Service
-    name: airlines-flight
+    name: airlines-flight-service
   port:
     targetPort: 8080
   tls:

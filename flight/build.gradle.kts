@@ -14,13 +14,10 @@ dependencies {
     // Spring Boot Starters
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-amqp")
     implementation("org.springframework.kafka:spring-kafka")
 
 
     // Spring Cloud Starters (versions managed via the BOM from the root)
-    implementation("org.springframework.cloud:spring-cloud-starter-config")
-    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
     // Swagger / API Documentation
@@ -50,7 +47,6 @@ docker {
     springBootApplication {
         baseImage.set("amazoncorretto:21")
         jvmArgs.set(listOf("-Duser.name=developer"))
-        mainClassName.set("com.bmuschko.app.Main")
 
         var images = setOf(
             "${registryUrl}/$registryProject/airlines-$moduleName:${version}",

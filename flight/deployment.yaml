@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: airlines-flight
   namespace: airlines-backend-microservices
+  labels:
+    app: airlines-flight
 spec:
   replicas: 2
   selector:
@@ -15,7 +17,7 @@ spec:
     spec:
       containers:
         - name: airlines-flight
-          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-flight:latest
+          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-flight:local-SNAPSHOT
           ports:
             - containerPort: 8080
           envFrom:
@@ -29,14 +31,16 @@ spec:
             - name: SPRING_DATA_MONGODB_PORT
               value: "27017"
             - name: SPRING_DATA_MONGODB_DATABASE
-              value: yourDatabaseName             # or another Secret/key
+              value: airlines             # or another Secret/key
             - name: SPRING_DATA_MONGODB_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: mongodb-secret
-                  key: MONGO_INITDB_ROOT_USERNAME
+                  key: MONGODB_ROOT_USER
             - name: SPRING_DATA_MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mongodb-secret
-                  key: MONGO_INITDB_ROOT_PASSWORD
+                  key: MONGODB_ROOT_PASSWORD
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: airlines-kafka-service:9092
