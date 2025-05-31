@@ -33,7 +33,6 @@ pluginManagement {
 
 //libs
 include(
-    "config-service",
     "flight",
     "mail-sender",
     "ticket",

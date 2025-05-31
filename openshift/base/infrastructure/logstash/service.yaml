@@ -17,3 +17,7 @@ spec:
       protocol: TCP
       port: 9600
       targetPort: 9600
+    - name: tcp-json
+      protocol: TCP
+      port: 5000
+      targetPort: 5000

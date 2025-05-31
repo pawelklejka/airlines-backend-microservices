@@ -4,6 +4,4 @@ metadata:
   name: airlines-flight-config
   namespace: airlines-backend-microservices
 data:
-  SPRING_PROFILES_ACTIVE: "prod"
-  SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/tourist"
   LOG_LEVEL: "INFO"

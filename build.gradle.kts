@@ -84,6 +84,7 @@ configure(
     }
 
     dependencies {
+        implementation("net.logstash.logback:logstash-logback-encoder:${property("logstashLogbackVersion")}")
         implementation("org.apache.commons:commons-lang3:${property("commonsLang3Version")}")
         implementation("org.apache.commons:commons-collections4:${property("commonsCollections4Version")}")
         implementation("com.sun.xml.bind:jaxb-impl:${property("jaxbImplVersion")}")
