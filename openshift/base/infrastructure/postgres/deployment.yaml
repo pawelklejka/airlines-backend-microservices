@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airlines-postgres
+  namespace: airlines-backend-microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airlines-postgres
+  template:
+    metadata:
+      labels:
+        app: airlines-postgres
+    spec:
+      securityContext:
+        fsGroup: 1000650000
+      containers:
+        - name: postgres
+          image: registry.redhat.io/rhel8/postgresql-15
+          env:
+            - name: POSTGRESQL_USER
+              value: keycloak
+            - name: POSTGRESQL_PASSWORD
+              value: keycloakpassword
+            - name: POSTGRESQL_DATABASE
+              value: keycloak
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc

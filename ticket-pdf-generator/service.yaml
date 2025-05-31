@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: airlines-ticket-pdf-generator-service
+  namespace: airlines-backend-microservices
+spec:
+  selector:
+    app: airlines-ticket-pdf-generator
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP

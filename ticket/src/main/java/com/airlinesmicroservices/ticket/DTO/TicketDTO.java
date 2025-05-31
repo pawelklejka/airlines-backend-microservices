@@ -1,9 +1,7 @@
 package com.airlinesmicroservices.ticket.DTO;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class TicketDTO {
     @NotBlank

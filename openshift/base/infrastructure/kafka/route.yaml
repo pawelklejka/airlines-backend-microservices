@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: airlines-kafka-route
+  namespace: airlines-backend-microservices
+spec:
+  to:
+    kind: Service
+    name: airlines-kafka-service
+  port:
+    targetPort: 9092
+  tls:
+    termination: edge

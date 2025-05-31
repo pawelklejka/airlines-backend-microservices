@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airlines-logstash
+  namespace: airlines-backend-microservices
+  labels:
+    app: airlines-logstash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airlines-logstash
+  template:
+    metadata:
+      labels:
+        app: airlines-logstash
+    spec:
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: logstash
+          image: docker.elastic.co/logstash/logstash:8.5.0
+          ports:
+            - containerPort: 5044  # Beats input
+            - containerPort: 9600  # Monitoring
+          env:
+            - name: XPACK_MONITORING_ENABLED
+              value: "true"
+          volumeMounts:
+            - name: logstash-config
+              mountPath: /usr/share/logstash/pipeline/logstash.conf
+              subPath: logstash.conf
+      volumes:
+        - name: logstash-config
+          configMap:
+            name: logstash-config

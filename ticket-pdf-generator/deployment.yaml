@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airlines-ticket-pdf-generator
+  namespace: airlines-backend-microservices
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: airlines-ticket-pdf-generator
+  template:
+    metadata:
+      labels:
+        app: airlines-ticket-pdf-generator
+    spec:
+      containers:
+        - name: airlines-ticket-pdf-generator
+          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-ticket-pdf-generator:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: airlines-ticket-pdf-generator-config
+            - secretRef:
+                name: airlines-ticket-pdf-generator-secrets
