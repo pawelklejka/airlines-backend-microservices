@@ -1,0 +1,12 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: airlines-jaeger-route
+spec:
+  to:
+    kind: Service
+    name: airlines-jaeger
+  port:
+    targetPort: jaeger-ui
+  tls:
+    termination: edge

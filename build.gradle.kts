@@ -5,6 +5,8 @@
  * Learn more about Gradle by exploring our Samples at https://docs.gradle.org/8.12.1/samples
  * This project uses @Incubating APIs which are subject to change.
  */
+import com.bmuschko.gradle.docker.DockerExtension
+import com.bmuschko.gradle.docker.tasks.DockerInfo
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import io.spring.gradle.dependencymanagement.dsl.ImportsHandler
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -20,9 +22,10 @@ plugins {
     java
     `java-library`
     `maven-publish`
+    id("com.bmuschko.docker-spring-boot-application") apply false
     id("org.springframework.boot") apply false
     id("io.spring.dependency-management") apply false
-    id("com.bmuschko.docker-spring-boot-application") apply false
+    id("com.bmuschko.docker-remote-api") apply false
     id("org.openapi.generator") apply false
     kotlin("jvm") apply false
     kotlin("plugin.spring") apply false
@@ -31,12 +34,16 @@ plugins {
 }
 
 allprojects {
-    group = "com.airlines-microservices"
+    group = "airlines-backend-microservices"
     version =
         if (project.properties["version"]!! == "unspecified") "local-SNAPSHOT" else project.properties["version"]!!
 }
 
 subprojects {
+    apply(plugin = "com.bmuschko.docker-remote-api")
+
+    tasks.register<DockerInfo>("dockerInfo")
+
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
             freeCompilerArgs.addAll("-Xjsr305=strict", "-Xallow-result-return-type")
@@ -45,12 +52,10 @@ subprojects {
     }
 }
 
-
-
 configure(
     allprojects.filter {
         it.path !in setOf(
-            ":airlines-microservices",
+            ":airlines-backend-microservices",
         )
     }
 ) {
@@ -84,6 +89,7 @@ configure(
         implementation("com.sun.xml.bind:jaxb-impl:${property("jaxbImplVersion")}")
         implementation("commons-io:commons-io:${property("commonsIoVersion")}")
         implementation("ognl:ognl:${property("ognlVersion")}")
+        implementation("org.springframework.kafka:spring-kafka:${property("springKafkaVersion")}")
         implementation("com.itextpdf:itextpdf:${property("itextPdfVersion")}")
         implementation("com.itextpdf:html2pdf:${property("html2PdfVersion")}")
         implementation("com.itextpdf:kernel:${property("kernelVersion")}")
@@ -93,11 +99,12 @@ configure(
         implementation("com.google.guava:guava:${property("guavaVersion")}")
         implementation("org.springframework.boot:spring-boot-starter-amqp:${property("amqpVersion")}")
         testImplementation("org.springframework.amqp:spring-rabbit-test:${property("rabbitTestVersion")}")
-
+        testImplementation("org.springframework.boot:spring-boot-starter-test:${property("springBootStarterTest")}")
 
         compileOnly("org.projectlombok:lombok")
         annotationProcessor("org.projectlombok:lombok")
         annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
     }
 
     configure<JavaPluginExtension> {
@@ -114,15 +121,21 @@ configure(
     tasks.named("clean").get().dependsOn("deleteGenSrc")
 }
 
-val bootableModules = setOf(
+val bootableModules: Set<String> = setOf(
     ":tourist",
     ":ticket",
     ":flight",
     ":mail-sender",
-    ":ticket-pdf-generator",
-    ":gateway",
-    ":config-service",
+    ":ticket-pdf-generator"
 )
+
+
+// Register the standalone task from buildSrc
+tasks.register<DockerPushAllTask>("dockerPushAll") {
+    val listOfBootableModules = bootableModules.toList()
+    modules.set(listOfBootableModules)
+}
+
 
 configure(
     allprojects.filter { it.path in bootableModules }
@@ -133,11 +146,21 @@ configure(
         plugin("io.spring.dependency-management")
         plugin("maven-publish")
         plugin("org.openapi.generator")
+        plugin("com.bmuschko.docker-spring-boot-application")
     }
 
     configure<SpringBootExtension> {
         buildInfo()
     }
+
+    configure<DockerExtension> {
+        registryCredentials {
+            url.set("default-route-openshift-image-registry.apps-crc.testing")
+            username.set("developer")
+            password.set(System.getenv("OPENSHIFT_TOKEN") ?: "sha256~7XQfVYUcbQRWytHN-b_Iaf-cKJlHFdzzrxyOTkU3wlo")
+        }
+    }
+
 
     publishing {
         publications {

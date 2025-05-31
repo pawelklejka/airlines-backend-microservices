@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: airlines-elasticsearch-route
+  namespace: airlines-backend-microservices
+spec:
+  to:
+    kind: Service
+    name: airlines-elasticsearch-service
+  port:
+    targetPort: rest
+  tls:
+    termination: edge

@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+  namespace: airlines-backend-microservices
+data:
+  logstash.conf: |
+    input {
+      ## 1) Keep Beats for Filebeat, if you want:
+      beats {
+        port => 5044
+      }
+
+      ## 2) Add a TCP input on port 5000 for JSON-encoded logs:
+      tcp {
+        port => 5000
+        codec => json_lines
+        # (optional) set `host => "0.0.0.0"` if you need to bind on all interfaces
+      }
+    }
+
+    filter {
+      # … any grok/date filters you like …
+    }
+
+    output {
+      elasticsearch {
+        hosts => ["http://airlines-elasticsearch-service:9200"]
+        # If your ES requires authentication, you can add:
+        # user => "elastic"
+        # password => "changeme"
+      }
+    }

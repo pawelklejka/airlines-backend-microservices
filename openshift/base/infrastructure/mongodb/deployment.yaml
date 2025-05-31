@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: airlines-mongodb
+  namespace: airlines-backend-microservices
+  labels:
+    app: airlines-mongodb
+spec:
+  serviceName: airlines-mongodb-headless         # must match the headless Service below
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airlines-mongodb                     # selects Pods with this label
+  template:
+    metadata:
+      labels:
+        app: airlines-mongodb                   # applied to each Pod
+    spec:
+      securityContext:
+        runAsNonRoot: true                # already there: ensure container runs with non-root UID
+        seccompProfile:
+          type: RuntimeDefault                 # ensures the Pod’s group can write to /bitnami/mongodb
+      containers:
+        - name: mongodb
+          image: bitnami/mongodb:8.0.9
+          ports:
+            - name: mongodb
+              containerPort: 27017
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ "ALL" ]
+          env:
+            - name: MONGODB_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGODB_ROOT_USER
+            - name: MONGODB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGODB_ROOT_PASSWORD
+            # (Optionally specify a default database)
+            - name: MONGODB_DATABASE
+              value: airlines
+          volumeMounts:
+            - name: mongo-storage
+              mountPath: /bitnami/mongodb
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-storage
+        namespace: airlines-backend-microservices
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi

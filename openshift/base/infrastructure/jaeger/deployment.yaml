@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: airlines-backend-microservices
+  name: airlines-jaeger
+  labels:
+    app: airlines-jaeger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airlines-jaeger
+  template:
+    metadata:
+      labels:
+        app: airlines-jaeger
+    spec:
+      containers:
+        - name: jaeger
+          image: jaegertracing/all-in-one:1.50
+          ports:
+            - containerPort: 16686  # UI Jaegera
+            - containerPort: 14250  # Jaeger gRPC
+            - containerPort: 4317   # OpenTelemetry (OTLP)
+          env:
+            - name: COLLECTOR_ZIPKIN_HTTP_PORT
+              value: "9411"
+            - name: COLLECTOR_OTLP_ENABLED
+              value: "true"

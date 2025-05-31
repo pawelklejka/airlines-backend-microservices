@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airlines-kibana
+  namespace: airlines-backend-microservices
+  labels:
+    app: airlines-kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airlines-kibana
+  template:
+    metadata:
+      labels:
+        app: airlines-kibana
+    spec:
+      containers:
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:8.5.0
+          ports:
+            - containerPort: 5601
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: "http://airlines-elasticsearch-service:9200"
+            # Use the service-account token instead of elastic/changeme
+            - name: ELASTICSEARCH_SERVICEACCOUNTTOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: kibana-service-token
+                  key: service-token
+          # (Optional) If your cluster enforces HTTPS:
+          # - name: ELASTICSEARCH_SSL_VERIFICATIONMODE
+          #   value: none

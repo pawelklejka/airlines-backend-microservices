@@ -26,6 +26,7 @@ pluginManagement {
         id("com.gorylenko.gradle-git-properties") version gradleGitVersion
         id("org.hidetake.swagger.generator") version swaggerGeneratorVersion
         id("com.bmuschko.docker-spring-boot-application") version gradleDockerVersion
+        id("com.bmuschko.docker-remote-api") version gradleDockerVersion
         id("org.openapi.generator") version openApiGeneratorPluginVersion
     }
 }
@@ -34,7 +35,6 @@ pluginManagement {
 include(
     "config-service",
     "flight",
-    "gateway",
     "mail-sender",
     "ticket",
     "ticket-pdf-generator",

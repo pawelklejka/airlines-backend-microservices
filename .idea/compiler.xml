@@ -12,9 +12,9 @@
         <module name="airlines-backend-microservices.config-service.main" />
         <module name="airlines-backend-microservices.ticket.main" />
         <module name="airlines-backend-microservices.tourist.main" />
+        <module name="airlines-backend-microservices.main" />
         <module name="airlines-backend-microservices.flight.main" />
         <module name="airlines-backend-microservices.mail-sender.main" />
-        <module name="airlines-backend-microservices.gateway.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="21">
@@ -60,9 +60,6 @@
       <module name="airlines-backend-microservices.flight" options="-parameters" />
       <module name="airlines-backend-microservices.flight.main" options="-parameters" />
       <module name="airlines-backend-microservices.flight.test" options="-parameters" />
-      <module name="airlines-backend-microservices.gateway" options="-parameters" />
-      <module name="airlines-backend-microservices.gateway.main" options="-parameters" />
-      <module name="airlines-backend-microservices.gateway.test" options="-parameters" />
       <module name="airlines-backend-microservices.mail-sender" options="-parameters" />
       <module name="airlines-backend-microservices.mail-sender.main" options="-parameters" />
       <module name="airlines-backend-microservices.mail-sender.test" options="-parameters" />

@@ -14,11 +14,10 @@ dependencies {
     // Spring Boot Starters
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("org.springframework.kafka:spring-kafka")
+
 
     // Spring Cloud Starters (versions managed via the BOM from the root)
-    implementation("org.springframework.cloud:spring-cloud-starter-config")
-    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
     // Swagger / API Documentation
@@ -38,4 +37,25 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
+}
+
+docker {
+    val registryUrl = "default-route-openshift-image-registry.apps-crc.testing"
+    val registryProject = "airlines-backend-microservices"
+    val moduleName = project.name
+
+    springBootApplication {
+        baseImage.set("amazoncorretto:21")
+        jvmArgs.set(listOf("-Duser.name=developer"))
+
+        var images = setOf(
+            "${registryUrl}/$registryProject/airlines-$moduleName:${version}",
+        )
+        if (version == "develop-SNAPSHOT") {
+            images = images.plus("${registryUrl}/$registryProject/airlines-$moduleName:latest")
+        }
+        this.images.set(
+            images,
+        )
+    }
 }

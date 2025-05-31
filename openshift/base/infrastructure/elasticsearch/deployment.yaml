@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airlines-elasticsearch
+  namespace: airlines-backend-microservices
+  labels:
+    app: airlines-elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airlines-elasticsearch
+  template:
+    metadata:
+      labels:
+        app: airlines-elasticsearch
+    spec:
+      containers:
+        - name: elasticsearch
+          image: docker.elastic.co/elasticsearch/elasticsearch:8.5.0
+          ports:
+            - containerPort: 9200
+            - containerPort: 9300
+          env:
+            - name: discovery.type
+              value: "single-node"
+            - name: ES_JAVA_OPTS
+              value: "-Xms512m -Xmx512m"
+            - name: ELASTIC_PASSWORD
+              value: "changeme"
+          volumeMounts:
+            - name: elastic-data
+              mountPath: /usr/share/elasticsearch/data
+      volumes:
+        - name: elastic-data
+          emptyDir: { }  # Change this to PersistentVolume for production
