@@ -1,0 +1,41 @@
+name: Move project card to In Progress on branch creation
+
+# Trigger this workflow whenever a new ref (branch or tag) is created
+on:
+  create:
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read             # We only need to read Issues to find matching title
+  repository-projects: write  # Required to move cards in a classic Project
+
+jobs:
+  move_card_to_in_progress:
+    # Only run when the new ref is a branch (not a tag)
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install jq for JSON parsing
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Capture newly created branch name
+        id: get_branch
+        run: |
+          # github.event.ref holds the name of the new ref (e.g. "feature/BE-21 - add caching")
+          echo "BRANCH_NAME=${{ github.event.ref }}" >> $GITHUB_OUTPUT
+
+      - name: Check if branch name matches pattern feature/BE-<NUM>
+        id: check_pattern
+        run: |
+          BRANCH="${{ steps.get_branch.outputs.BRANCH_NAME }}"
+          # Regex: starts with "feature/BE-" followed by digits
+          if [[ "$BRANCH" =~ ^feature/BE-([0-9]+) ]]; then
+            ISSUE_CUSTOM_ID="${BASH_REMATCH[1]}"
+            echo "ISSUE_CUSTOM_ID=$ISSUE_CUSTOM_ID" >> $GITHUB_OUTPUT
+            echo "PATTERN_MATCH=true" >> $GITHUB_OUTPUT
+          else
+            echo "PATTERN_MATCH=false" >> $GITHUB_OUTPUT
