@@ -36,7 +36,7 @@ plugins {
 allprojects {
     group = "airlines-backend-microservices"
     version =
-        if (project.properties["version"]!! == "unspecified") "local-SNAPSHOT" else project.properties["version"]!!
+        if (project.properties["version"]!! == "unspecified") "develop-SNAPSHOT" else project.properties["version"]!!
 }
 
 subprojects {
@@ -98,8 +98,7 @@ configure(
         implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:${property("openApiWebfluxVersion")}")
         implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("openApiStarterVersion")}")
         implementation("com.google.guava:guava:${property("guavaVersion")}")
-        implementation("org.springframework.boot:spring-boot-starter-amqp:${property("amqpVersion")}")
-        testImplementation("org.springframework.amqp:spring-rabbit-test:${property("rabbitTestVersion")}")
+
         testImplementation("org.springframework.boot:spring-boot-starter-test:${property("springBootStarterTest")}")
 
         compileOnly("org.projectlombok:lombok")

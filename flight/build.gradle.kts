@@ -16,7 +16,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.kafka:spring-kafka")
 
-
     // Spring Cloud Starters (versions managed via the BOM from the root)
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 

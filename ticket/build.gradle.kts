@@ -9,17 +9,15 @@ dependencies {
     // Spring Boot Starters
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("org.springframework.kafka:spring-kafka")
 
-    // Spring Cloud Starters (versions managed via the BOM imported in the root)
-    implementation("org.springframework.cloud:spring-cloud-starter-config")
+    // Spring Cloud Starters (versions managed via the BOM from the root)
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
-    // OpenAPI Documentation – latest version per Maven Repository
+    // Swagger / API Documentation
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
 
-    // Testing
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    // Additional Test Dependencies
     testImplementation("org.springframework.amqp:spring-rabbit-test")
 }
 

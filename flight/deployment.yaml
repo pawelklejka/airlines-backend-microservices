@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: airlines-flight
-          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-flight:local-SNAPSHOT
+          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-flight:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

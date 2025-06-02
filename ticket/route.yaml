@@ -8,6 +8,6 @@ spec:
     kind: Service
     name: airlines-ticket-service
   port:
-    targetPort: 8080
+    targetPort: 80
   tls:
     termination: edge
