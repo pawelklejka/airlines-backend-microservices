@@ -4,7 +4,7 @@ metadata:
   name: airlines-mail-sender
   namespace: airlines-backend-microservices
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: airlines-mail-sender
@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: airlines-mail-sender
-          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-mail-sender:latest
+          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-mail-sender:local-SNAPSHOT
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:
@@ -23,3 +24,14 @@ spec:
                 name: airlines-mail-sender-config
             - secretRef:
                 name: airlines-mail-sender-secrets
+          env:
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGODB_ROOT_USER
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGODB_ROOT_PASSWORD

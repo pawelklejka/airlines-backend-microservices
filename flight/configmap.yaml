@@ -5,3 +5,7 @@ metadata:
   namespace: airlines-backend-microservices
 data:
   LOG_LEVEL: "INFO"
+  SPRING_DATA_MONGODB_HOST: "mongodb-service"
+  SPRING_DATA_MONGODB_PORT: "27017"
+  SPRING_DATA_MONGODB_DATABASE: "airlines"
+  KAFKA_BOOTSTRAP_SERVERS: "airlines-kafka-service:9092"

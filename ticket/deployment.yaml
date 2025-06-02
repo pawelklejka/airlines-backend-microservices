@@ -4,7 +4,7 @@ metadata:
   name: airlines-ticket
   namespace: airlines-backend-microservices
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: airlines-ticket
@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: airlines-ticket
-          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-ticket:latest
+          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-ticket:local-SNAPSHOT
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:
@@ -23,3 +24,14 @@ spec:
                 name: airlines-ticket-config
             - secretRef:
                 name: airlines-ticket-secrets
+          env:
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGODB_ROOT_USER
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGODB_ROOT_PASSWORD

@@ -1,0 +1,57 @@
+<configuration>
+
+    <!--
+      1. We define a “Logstash TCP” appender.
+         It will open a TCP socket to Logstash on port 5000 and send JSON for every log event.
+    -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!--
+          2. Set the destination to your Logstash service DNS.
+             In OpenShift, if your Logstash Service is called:
+               airlines-logstash-service.airlines-backend-microservices.svc.cluster.local:5000
+
+             you can use the short form:
+               airlines-logstash-service.airlines-backend-microservices:5000
+
+          3. Because Logstash and Spring Boot run in the same namespace,
+             the full DNS is:
+               <service-name>.<namespace>.svc.cluster.local
+        -->
+        <destination>airlines-logstash-service:5000</destination>
+
+        <!--
+          4. Encoder: JSON format of each log event.
+        -->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- Optionally, you can add additional fields (e.g. “appName”, “env”) -->
+            <customFields>{"app":"airlines-ticket-pdf-generator","env":"dev"}</customFields>
+        </encoder>
+
+        <!--
+          5. Reconnect on error / retry forever:
+        -->
+        <keepAliveDuration>30000</keepAliveDuration>
+        <reconnectionDelay>10000</reconnectionDelay>
+    </appender>
+
+
+    <!--
+      6. (Optional) You can keep a console and/or file appender if you still want local logs:
+    -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!--
+      7. Configure the “root” logger:
+         Send all INFO+ logs to LOGSTASH (and optionally STDOUT).
+    -->
+    <root level="INFO">
+        <appender-ref ref="LOGSTASH" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

@@ -5,9 +5,9 @@ NAMESPACE="airlines-backend-microservices"
 
 # Define infrastructure services **in the correct order**
 INFRA_SERVICES=(
-    "postgres"    # PostgreSQL must start first
-    "keycloak"    # Keycloak depends on PostgreSQL
-    "kafka"       # Kafka starts after Keycloak
+    "postgres"      # PostgreSQL must start first
+    "keycloak"      # Keycloak depends on PostgreSQL
+    "kafka"         # Kafka starts after Keycloak
     "elasticsearch"
     "kibana"
     "logstash"
@@ -173,9 +173,61 @@ wait_for_pod "postgres"
 echo "⏳ Waiting for airlines-keycloak to be ready..."
 wait_for_pod "keycloak"
 
-# Ensure Kafka is ready before microservices start
+# Ensure Kafka is ready before microservices and ELK
 echo "⏳ Waiting for airlines-kafka to be ready..."
 wait_for_pod "kafka"
+
+# ───────────────────────────────────────────────────────
+# Inserted Block: Regenerate Kibana token & recreate Secret
+# ───────────────────────────────────────────────────────
+
+echo "⏳ Waiting for airlines-elasticsearch to be ready..."
+wait_for_pod "elasticsearch"
+
+# Identify the Elasticsearch pod name
+ES_POD=$(oc get pod -n $NAMESPACE -l app=airlines-elasticsearch -o jsonpath='{.items[0].metadata.name}')
+if [[ -z "$ES_POD" ]]; then
+  echo "❌ ERROR: Could not find Elasticsearch pod (label app=airlines-elasticsearch)." >&2
+  exit 1
+fi
+echo "✅ Found Elasticsearch pod: $ES_POD"
+
+# Generate a new Kibana service-account token inside Elasticsearch
+echo "🔑 Generating new Kibana service-account token inside ES pod..."
+  oc exec -n $NAMESPACE -it "$ES_POD" -- bash -lc "bin/elasticsearch-service-tokens delete elastic/kibana kibana-token-01"
+
+RAW_OUTPUT=$(
+    oc exec -n airlines-backend-microservices -it "$ES_POD" -- bash -lc \
+      "bin/elasticsearch-service-tokens create elastic/kibana kibana-token-01"
+  )
+NEW_TOKEN=$(echo "$RAW_OUTPUT" | sed -e 's/^.*= //g' | tr -d '\r\n')
+echo $NEW_TOKEN
+
+if [[ -z "$NEW_TOKEN" ]]; then
+  echo "❌ ERROR: Failed to generate a Kibana token. Aborting." >&2
+  exit 1
+fi
+echo "🔑 Generated Kibana token (length=${#NEW_TOKEN})."
+
+# Delete the old Secret (if it exists)
+if oc get secret kibana-service-token -n $NAMESPACE &>/dev/null; then
+  echo "🗑️  Deleting existing Secret: kibana-service-token"
+  oc delete secret kibana-service-token -n $NAMESPACE
+fi
+
+# Create a fresh Secret named kibana-service-token with the new token
+echo "🛠️  Creating new Secret: kibana-service-token"
+oc create secret generic kibana-service-token \
+  --from-literal=service-token="${NEW_TOKEN}" \
+  -n $NAMESPACE
+echo "✔️  Secret 'kibana-service-token' recreated successfully."
+
+# Restart the Kibana pod so it picks up the new token
+echo "🔁 Restarting Kibana pod to load the new token..."
+oc delete pod -l app=airlines-kibana -n $NAMESPACE &>/dev/null || true
+# (Kubernetes/OpenShift will automatically spin up a new Kibana pod)
+
+# ───────────────────────────────────────────────────────
 
 # Deploy all microservices
 for SERVICE in "${BOOTABLE_MODULES[@]}"; do
@@ -183,3 +235,4 @@ for SERVICE in "${BOOTABLE_MODULES[@]}"; do
 done
 
 echo "✅ All infrastructure services and microservices have been deployed successfully!"
+

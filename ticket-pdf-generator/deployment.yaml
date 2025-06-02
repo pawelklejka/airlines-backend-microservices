@@ -4,7 +4,7 @@ metadata:
   name: airlines-ticket-pdf-generator
   namespace: airlines-backend-microservices
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: airlines-ticket-pdf-generator
@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: airlines-ticket-pdf-generator
-          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-ticket-pdf-generator:latest
+          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-ticket-pdf-generator:local-SNAPSHOT
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:

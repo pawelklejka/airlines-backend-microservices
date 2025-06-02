@@ -27,7 +27,7 @@ data:
       elasticsearch {
         hosts => ["http://airlines-elasticsearch-service:9200"]
         # If your ES requires authentication, you can add:
-        # user => "elastic"
-        # password => "changeme"
+        user => "elastic"
+        password => "changeme"
       }
     }

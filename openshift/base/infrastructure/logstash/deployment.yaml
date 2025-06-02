@@ -23,9 +23,10 @@ spec:
           ports:
             - containerPort: 5044  # Beats input
             - containerPort: 9600  # Monitoring
+            - containerPort: 5000
           env:
             - name: XPACK_MONITORING_ENABLED
-              value: "true"
+              value: "false"
           volumeMounts:
             - name: logstash-config
               mountPath: /usr/share/logstash/pipeline/logstash.conf

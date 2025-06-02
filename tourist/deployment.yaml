@@ -4,7 +4,7 @@ metadata:
   name: airlines-tourist
   namespace: airlines-backend-microservices
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: airlines-tourist
@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: airlines-tourist
-          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-tourist:latest
+          image: default-route-openshift-image-registry.apps-crc.testing/airlines-backend-microservices/airlines-tourist:local-SNAPSHOT
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:
